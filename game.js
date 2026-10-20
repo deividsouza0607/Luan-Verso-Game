@@ -6,12 +6,12 @@ const ctx=canvas.getContext('2d');
 if(!ctx){throw new Error('Não foi possível criar o contexto 2D do labirinto.');}
 const N=31,T=30, map=Array.from({length:N},()=>Array(N).fill(1));
 const player={x:15.5,y:29.5,r:.23,speed:3.5};
-let levers=[],iceCoins=[],freezeFlakes=[],mysteryBoxes=[],spiders=[],vortexStarted=0,jarCollected=false,vortexSoundTimer=0,frozenUntil=0,phaseRemaining=180,speedBoostUntil=0,speedBoots=[],specialPowers=[],magnetUntil=0,doublePointsUntil=0,shieldCharges=0,revealUntil=0,stunUntil=0;
+let levers=[],iceCoins=[],freezeFlakes=[],mysteryBoxes=[],spiders=[],vortexStarted=0,jarCollected=false,vortexSoundTimer=0,frozenUntil=0,phaseRemaining=180,speedBoostUntil=0,speedBoots=[],specialPowers=[],magnetUntil=0,doublePointsUntil=0,shieldCharges=0,revealUntil=0,stunUntil=0,laserUntil=0,laserCooldownUntil=0,playerFacing={x:0,y:-1},shadowBoss=null;
 const portal={x:15.5,y:15.5};let phase=1,activated=[false,false,false,false],keys={},elapsed=0,lastTime=0,won=false,startedAt=performance.now(),toastTimer=0,gameStarted=false,lastSavedSecond=-1,lives=3,coins=0,spawnBeamUntil=0;
 const SAVE_KEY='luanVersoEspelhoRoxoSaveV1';
 const titleScreen=document.getElementById('titleScreen'),continueButton=document.getElementById('continueAdventure');
 let soundEnabled=true,audioCtx=null;
-const heroPortrait=new Image();heroPortrait.src='assets/luan_retrato.png';
+const heroPortrait=new Image();heroPortrait.src='assets/luan_retrato.webp';
 
 let suspenseNodes=[],musicOscillators=[],musicMaster=null,musicBoosted=false;
 let playerName='',totalScore=0,totalItems=0,runStartedAt=0,phaseItems=0,phaseSeconds=0,unlockedAchievements=[],lastPowerName='',lastPowerAt=0,secretPortalWarp=false;
@@ -200,10 +200,12 @@ function collectFreezeFlakes(){for(const f of freezeFlakes){if(!f.taken&&Math.hy
 function drawFreezeFlake(f,t){if(f.taken)return;const x=f.x*T,y=f.y*T;ctx.save();glow(x,y,34,'#6eeeffALPHA',.95);ctx.translate(x,y);ctx.rotate(t*.7);ctx.strokeStyle='#d9fbff';ctx.lineWidth=3;ctx.lineCap='round';ctx.shadowColor='#55dfff';ctx.shadowBlur=16;for(let i=0;i<6;i++){ctx.save();ctx.rotate(i*Math.PI/3);ctx.beginPath();ctx.moveTo(0,-13);ctx.lineTo(0,13);ctx.moveTo(0,-8);ctx.lineTo(-4,-4);ctx.moveTo(0,-8);ctx.lineTo(4,-4);ctx.moveTo(0,8);ctx.lineTo(-4,4);ctx.moveTo(0,8);ctx.lineTo(4,4);ctx.stroke();ctx.restore()}ctx.restore();}
 function frozenNow(){return performance.now()<frozenUntil;}
 function loseLife(){if(shieldCharges>0){shieldCharges--;playSound('freeze');showToast('ESCUDO GUARDIÃO bloqueou o golpe!');return;}lives--;playSound('hurt');if(lives<=0){lives=0;gameStarted=false;playGameOverMusic();showToast('Você perdeu todas as vidas. Reinicie a aventura.');document.getElementById('winTitle').textContent='FIM DE JOGO';document.getElementById('winMessage').textContent='Suas vidas acabaram. Reinicie a aventura para tentar novamente.';document.getElementById('restartWin').textContent='Tentar novamente';document.getElementById('winOverlay').classList.remove('hidden');}else{player.x=15.5;player.y=29.5;spawnBeamUntil=performance.now()+2600;showToast('Você perdeu uma vida! Vidas restantes: '+lives);}updateUI();saveGame();}
-function generatePhase(){stopSuspenseMusic();carveMaze();placeRandomLevers();placeIceCoins();placeMysteryBoxes();player.x=(phase===1?portal.x:15.5);player.y=(phase===1?portal.y:29.5);spawnBeamUntil=performance.now()+4200;activated=[false,false,false,false];won=false;vortexStarted=0;jarCollected=false;vortexSoundTimer=0;frozenUntil=0;phaseRemaining=180;/* Poderes ativos e cargas não usadas atravessam para a próxima fase. */placeFreezeFlakes();placeSpeedBoots();placeSpecialPowers();if(gameStarted)startSuspenseMusic();document.getElementById('winOverlay').classList.add('hidden');updateUI();}
-function monsterKindForPhase(){if(phase<=3)return 'spider';const set=Math.floor((phase-1)/3)%5;return ['spider','skeleton','slime','wisp','shadow'][set];}
+function generatePhase(){stopSuspenseMusic();carveMaze();placeRandomLevers();placeIceCoins();placeMysteryBoxes();if(phase===20){prepareFinalMonsterHorde();shadowBoss={x:portal.x+3,y:portal.y+3,hp:100,maxHp:100,blinkUntil:performance.now()+3500,solidUntil:0,nextClones:performance.now()+4500,clonesSpawned:0,alive:true};}else shadowBoss=null;player.x=(phase===1?portal.x:15.5);player.y=(phase===1?portal.y:29.5);spawnBeamUntil=performance.now()+4200;activated=[false,false,false,false];won=false;vortexStarted=0;jarCollected=false;vortexSoundTimer=0;frozenUntil=0;phaseRemaining=180;/* Poderes ativos e cargas não usadas atravessam para a próxima fase. */placeFreezeFlakes();placeSpeedBoots();placeSpecialPowers();if(gameStarted)startSuspenseMusic();document.getElementById('winOverlay').classList.add('hidden');updateUI();}
+function monsterKindForPhase(){const set=Math.max(0,Math.floor((phase-2)/3))%6;return ['spider','skeleton','slime','wisp','shadow','golem'][set];}
 function placeMysteryBoxes(){
- // Apenas um baú surpresa por fase, em uma célula navegável aleatória.
+ // A partir da fase 2, posiciona cinco baús com monstros dentro em células navegáveis distintas.
+ mysteryBoxes=[];spiders=[];
+ if(phase<2)return;
  const candidates=[];
  for(let y=2;y<N-2;y++)for(let x=2;x<N-2;x++){
   const px=x+.5,py=y+.5;
@@ -212,50 +214,85 @@ function placeMysteryBoxes(){
   if(levers.some(l=>Math.hypot(px-l.x,py-l.y)<2.2))continue;
   candidates.push({x,y});
  }
- if(!candidates.length){mysteryBoxes=[];spiders=[];return;}
- const pos=candidates[Math.floor(Math.random()*candidates.length)];
- for(let yy=pos.y-1;yy<=pos.y+1;yy++)for(let xx=pos.x-1;xx<=pos.x+1;xx++)if(xx>0&&xx<N-1&&yy>0&&yy<N-1)map[yy][xx]=0;
- mysteryBoxes=[{x:pos.x+.5,y:pos.y+.5,kind:'surprise',opened:false,resolved:false,openAt:0,content:null}];
+ // Distribui os baús pelo labirinto para evitar que apareçam agrupados.
+ const chosen=[];
+ while(chosen.length<5&&candidates.length){
+  let bestIndex=-1,bestScore=-Infinity;
+  const sampleCount=Math.min(120,candidates.length);
+  for(let k=0;k<sampleCount;k++){
+   const idx=Math.floor(Math.random()*candidates.length),c=candidates[idx];
+   const spacing=chosen.length?Math.min(...chosen.map(q=>Math.hypot(c.x-q.x,c.y-q.y))):100;
+   const score=spacing+Math.random()*5;
+   if(score>bestScore){bestScore=score;bestIndex=idx;}
+  }
+  if(bestIndex<0)break;
+  const pos=candidates.splice(bestIndex,1)[0];chosen.push(pos);
+ }
+ chosen.forEach((pos,index)=>{
+  for(let yy=pos.y-1;yy<=pos.y+1;yy++)for(let xx=pos.x-1;xx<=pos.x+1;xx++)if(xx>0&&xx<N-1&&yy>0&&yy<N-1)map[yy][xx]=0;
+  mysteryBoxes.push({x:pos.x+.5,y:pos.y+.5,kind:'surprise',opened:false,resolved:false,openAt:0,content:index===4?'secret':null,chestIndex:index,autoOpenAt:performance.now()+1800+index*1150});
+ });
+}
+function prepareFinalMonsterHorde(){
+ // Na fase final, o único baú guarda os seis tipos de monstros.
+ // Eles são liberados em sequência quando o jogador abre o baú.
+ if(phase!==20||!mysteryBoxes.length)return;
+ const box=mysteryBoxes[0];
+ box.finalHorde=true;
+ box.content=null;
+ box.opened=false;box.resolved=false;box.openAt=0;
  spiders=[];
 }
+function releaseFinalMonsterHorde(box){
+ const kinds=['spider','skeleton','slime','wisp','shadow','golem'];
+ const now=performance.now();
+ kinds.forEach((kind,index)=>spiders.push({x:box.x,y:box.y,homeX:box.x,homeY:box.y,kind,active:false,delay:now+650+index*520,angle:index*Math.PI/3,sucked:false,emerging:true,emergeAt:now+index*520,finalHorde:true}));
+ playSound('hurt');
+ showToast('CHEFE FINAL! O baú libertou os seis monstros: Aranha, Esqueleto, Slime, Espírito, Sombra e Golem!');
+}
 function resolveSurpriseChest(box){
- if(!box||box.resolved)return;
- box.opened=true;box.resolved=true;box.openAt=performance.now();
- const roll=Math.random();
- if(roll<.34){
-  const kind=monsterKindForPhase();
-  box.content='monster';
-  spiders.push({x:box.x,y:box.y,homeX:box.x,homeY:box.y,kind,active:true,delay:0,angle:0,sucked:false});
-  playSound('hurt');showToast('⚠️ EMBOSCADA! Um monstro saiu do baú!');
- }else if(roll<.58){
-  box.content='life';const before=lives;lives=Math.min(5,lives+1);
-  if(lives>before){playSound('life');showToast('♥ VIDA EXTRA! Você encontrou um coração no baú!');}
-  else{coins+=50;awardItem(20,'Tesouro do baú');playSound('coin');showToast('♥ Suas vidas estão cheias! Baú convertido em +50 moedas.');}
-  updateUI();saveGame();
- }else{
-  const power=POWER_TYPES[Math.floor(Math.random()*POWER_TYPES.length)];box.content='power';
-  awardItem(30,power.name);const now=performance.now();
-  switch(power.id){
-   case'time':phaseRemaining=Math.min(240,phaseRemaining+30);break;
-   case'magnet':magnetUntil=now+12000;break;
-   case'double':doublePointsUntil=now+15000;break;
-   case'shield':shieldCharges=Math.min(2,shieldCharges+1);break;
-   case'reveal':revealUntil=now+12000;break;
-   case'stun':stunUntil=now+8000;break;
-   case'life':lives=Math.min(5,lives+1);break;
-  }
-  lastPowerName=power.name;lastPowerAt=now;playSound('coin');showToast('✨ PODER SURPRESA: '+power.name+' — '+power.desc+'!');updateUI();saveGame();
- }
+ if(!box||box.resolved||box.content==='secret')return;
+ box.opened=true;box.resolved=true;box.openAt=performance.now();box.content='monster';
+ if(phase===20&&box.chestIndex===0&&box.finalHorde){releaseFinalMonsterHorde(box);return;}
+ const kind=phase===20?['spider','skeleton','slime','wisp','shadow','golem'][box.chestIndex%6]:monsterKindForPhase();
+ spiders.push({x:box.x,y:box.y,homeX:box.x,homeY:box.y,kind,active:false,delay:performance.now()+650,angle:0,sucked:false,emerging:true,emergeAt:performance.now(),chestIndex:box.chestIndex});
+ playSound('hurt');
+ const labels={spider:'Aranha',skeleton:'Esqueleto',slime:'Slime',wisp:'Espírito',shadow:'Sombra',golem:'Golem'};
+ showToast('⚠️ EMBOSCADA! O baú '+(box.chestIndex+1)+' libertou um '+(labels[kind]||'monstro')+'!');
 }
 
-generatePhase();
+
+function fireGuardianLaser(){
+ const now=performance.now();
+ if(!gameStarted||won||phase<17||now<laserCooldownUntil){if(phase<17)showToast('🔒 O LASER será desbloqueado na fase 17!');return;}
+ laserUntil=now+520;laserCooldownUntil=now+950;
+ // Laser percorre a direção para a qual Luan está virado e desintegra os monstros no caminho.
+ let hits=0;
+ if(phase===20&&shadowBoss&&shadowBoss.alive&&now>=shadowBoss.blinkUntil&&now>=shadowBoss.solidUntil){
+  const dx=shadowBoss.x-player.x,dy=shadowBoss.y-player.y,along=dx*playerFacing.x+dy*playerFacing.y,side=Math.abs(dx*playerFacing.y-dy*playerFacing.x);
+  if(along>0&&along<12&&side<1.35){shadowBoss.hp=Math.max(0,shadowBoss.hp-1);hits++;if(shadowBoss.hp===0){shadowBoss.alive=false;showToast('O LUAN DE SOMBRAS FOI DERROTADO!');}}
+ }
+ for(const s of spiders){
+  if(!s.active)continue;
+  const dx=s.x-player.x,dy=s.y-player.y;
+  const along=dx*playerFacing.x+dy*playerFacing.y;
+  const side=Math.abs(dx*playerFacing.y-dy*playerFacing.x);
+  if(along>0&&along<10&&side<0.72){s.active=false;s.disintegrating=true;s.disintegrateAt=now;hits++;}
+ }
+ playSound('hurt');
+ showToast(hits?'⚡ LASER! '+hits+' monstro(s) desintegrado(s)!':'⚡ LASER DO GUARDIÃO! Mire nos monstros.');
+}
+
 function wallAt(x,y){const tx=Math.floor(x),ty=Math.floor(y);return tx<0||ty<0||tx>=N||ty>=N||map[ty][tx]===1}
 function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.opacity='1';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.opacity='.65',2600)}
 function updatePowerStatus(){const now=performance.now(),items=[];const state=(active,label)=>items.push('<span class="power-pill '+(active?'power-active':'power-inactive')+'">'+label+'</span>');state(speedBoostUntil>now,'👟 Pé mágico — '+(speedBoostUntil>now?'ATIVO '+Math.ceil((speedBoostUntil-now)/1000)+'s':'não ativo'));state(magnetUntil>now,'🧲 Ímã Arcano — '+(magnetUntil>now?'ATIVO '+Math.ceil((magnetUntil-now)/1000)+'s':'não ativo'));state(doublePointsUntil>now,'★ Dobrador de Pontos — '+(doublePointsUntil>now?'ATIVO '+Math.ceil((doublePointsUntil-now)/1000)+'s':'não ativo'));state(shieldCharges>0,'🛡️ Escudo Guardião — '+(shieldCharges>0?shieldCharges+' carga(s)':'sem carga'));state(revealUntil>now,'👁️ Visão Mística — '+(revealUntil>now?'ATIVA '+Math.ceil((revealUntil-now)/1000)+'s':'não ativa'));state(stunUntil>now,'⚡ Pulso Elétrico — '+(stunUntil>now?'ATIVO '+Math.ceil((stunUntil-now)/1000)+'s':'não ativo'));state(frozenUntil>now,'❄️ Floco congelante — '+(frozenUntil>now?'ATIVO '+Math.ceil((frozenUntil-now)/1000)+'s':'não ativo'));state(lastPowerName&&now-lastPowerAt<4500,'✨ Último coletado — '+(lastPowerName&&now-lastPowerAt<4500?escapeHtml(lastPowerName):'nenhum recentemente'));const node=document.getElementById('powerStatusList');if(node)node.innerHTML=items.join('');} 
 function updateUI(){const outsideLives=document.getElementById('outsideLives');if(outsideLives)outsideLives.textContent=('♥ '.repeat(Math.max(0,lives))).trim()||'♡';const outsideScore=document.getElementById('outsideScore');if(outsideScore)outsideScore.textContent=String(totalScore); const iceHud=document.getElementById('iceCountHud');if(iceHud)iceHud.textContent=iceCoins.filter(q=>q.taken).length;const phaseNode=document.getElementById('phaseNumber');if(phaseNode)phaseNode.textContent=phase;const hearts=document.getElementById('hudHearts');if(hearts)hearts.textContent=('♥ '.repeat(Math.max(0,lives))).trim()||'♡';const count=activated.filter(Boolean).length;document.getElementById('progressLabel').textContent=count+' / 4';document.getElementById('leverCount').textContent=count+'/4';document.getElementById('lifeCount').textContent='♥ '.repeat(lives).trim()||'0';document.getElementById('coinCount').textContent=coins;document.getElementById('progressFill').style.width=(count*25)+'%';activated.forEach((v,i)=>{document.getElementById('obj'+i).classList.toggle('done',v);document.getElementById('icon'+i).classList.toggle('active',v)});document.getElementById('obj4').classList.toggle('done',won);updatePowerStatus();document.getElementById('statusText').textContent=won?'Fase concluída!':count===4?'FASE '+phase+'/20 · O portal foi desbloqueado!':'FASE '+phase+'/20 · Encontre as quatro alavancas'}
 function interact(){if(won)return;let nearest=-1,dist=1.45;levers.forEach((l,i)=>{const d=Math.hypot(player.x-l.x,player.y-l.y);if(d<dist){nearest=i;dist=d}});if(nearest>=0){if(!activated[nearest]){playSound('lever');activated[nearest]=true;showToast('Alavanca '+(nearest+1)+' ativada! O selo enfraqueceu.');updateUI();saveGame()}else showToast('Esta alavanca já está ativada.');return}const pd=Math.hypot(player.x-portal.x,player.y-portal.y);if(pd<2.1){if(activated.every(Boolean)){playSound('win');won=true;document.getElementById('winTitle').textContent=phase===20?'CAPÍTULO CONCLUÍDO!':'FASE '+phase+' CONCLUÍDA!';document.getElementById('winMessage').textContent=phase===20?'Você venceu as 20 fases de O Labirinto!':(checkpointPasswords[phase]?'Você concluiu um checkpoint! Anote o password abaixo antes de continuar.':'As quatro alavancas romperam o selo. O feixe roxo vai sugar você para a próxima fase.');const checkpointBox=document.getElementById('checkpointPassword');if(checkpointBox){if(checkpointPasswords[phase]){checkpointBox.classList.remove('hidden');document.getElementById('checkpointCode').textContent=checkpointPasswords[phase];const passLabel=checkpointBox.querySelector('small');if(passLabel)passLabel.textContent=phase===3?'FASE 3 CONCLUÍDA — ANOTE SEU PASSWORD':'CHECKPOINT CONCLUÍDO — ANOTE SEU PASSWORD';}else{checkpointBox.classList.add('hidden');}}document.getElementById('restartWin').textContent=phase===20?'Voltar ao menu':'Entrar no portal → Próxima fase';document.getElementById('winOverlay').classList.remove('hidden');showToast('O Portal reconheceu você.');updateUI()}else{playSound('portal');showToast('O Portal está selado. Ative as quatro alavancas primeiro.')}return}showToast('Chegue perto de uma alavanca ou do Portal e pressione E.');}
-window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(!gameStarted){if(k==='enter')startFresh();return}if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();keys[k]=true;if(k==='e'||k==='enter'){playSound('tap');interact();}if(k==='r')reset()});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);window.addEventListener('blur',()=>keys={});
-document.querySelectorAll('[data-move]').forEach(b=>{const k={up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright'}[b.dataset.move];const on=e=>{e.preventDefault();playSound('tap');keys[k]=true},off=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',on);['pointerup','pointercancel','pointerleave'].forEach(ev=>b.addEventListener(ev,off))});document.getElementById('mobileInteract').addEventListener('click',()=>{if(gameStarted){playSound('tap');interact()}});document.getElementById('resetBtn').addEventListener('click',()=>{playSound('tap');reset()});document.getElementById('restartWin').addEventListener('click',()=>{playSound('tap');if(lives<=0){document.getElementById('winOverlay').classList.add('hidden');startFresh();return}if(phase>=20){try{localStorage.removeItem(SAVE_KEY)}catch(e){}document.getElementById('winOverlay').classList.add('hidden');document.getElementById('comicEnding')?.classList.remove('hidden');return}else{phase++;elapsed=0;generatePhase();startedAt=performance.now();won=false;document.getElementById('winOverlay').classList.add('hidden');showToast('Fase '+phase+' de 20. Novo labirinto!');saveGame()}});document.getElementById('menuReturnBtn').addEventListener('click',returnToMenu);const returnHome=document.getElementById('returnHome');if(returnHome)returnHome.addEventListener('click',returnToMenu);document.getElementById('soundToggle').addEventListener('click',()=>{soundEnabled=!soundEnabled;document.getElementById('soundToggle').textContent=soundEnabled?'🔊 Som: ligado':'🔇 Som: desligado';if(soundEnabled){playSound('tap');if(gameStarted)startSuspenseMusic();else startMenuMusic()}else stopSuspenseMusic()});try{playerName=localStorage.getItem(PLAYER_KEY)||''}catch(e){}const playerPrompt=document.getElementById('playerNamePrompt');if(playerName&&playerPrompt)playerPrompt.classList.add('hidden');const nameSubmit=document.getElementById('confirmPlayerName');if(nameSubmit)nameSubmit.addEventListener('click',startFresh);const nameInput=document.getElementById('playerNameInput');if(nameInput)nameInput.addEventListener('keydown',e=>{if(e.key==='Enter')startFresh()});document.getElementById('startAdventure').addEventListener('click',startFresh);const comicContinue=document.getElementById('comicIntroContinue');if(comicContinue)comicContinue.addEventListener('click',finishComicIntro);const comicClose=document.getElementById('comicIntroClose');if(comicClose)comicClose.addEventListener('click',finishComicIntro);if(continueButton)continueButton.addEventListener('click',continueGame);const endingContinue=document.getElementById('comicEndingContinue');if(endingContinue)endingContinue.addEventListener('click',()=>{document.getElementById('comicEnding')?.classList.add('hidden');phase=1;elapsed=0;gameStarted=false;titleScreen.classList.remove('hidden');refreshContinueButton();returnToMenu()});
+window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(!gameStarted){if(k==='enter')startFresh();return}if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();keys[k]=true;if(k==='e'||k==='enter'){playSound('tap');interact();}if(k===' '){fireGuardianLaser();}if(k==='r')reset()});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);window.addEventListener('blur',()=>keys={});
+const mobileLaser=document.getElementById('mobileLaser');if(mobileLaser)mobileLaser.addEventListener('pointerdown',e=>{e.preventDefault();fireGuardianLaser();});
+// Mobile swipe movement replaces the on-screen directional arrows.
+(()=>{const canvas=document.querySelector('.scene-wrap canvas');if(!canvas)return;let start=null;canvas.addEventListener('touchstart',e=>{if(!gameStarted||!e.touches.length)return;const t=e.touches[0];start={x:t.clientX,y:t.clientY};},{passive:true});canvas.addEventListener('touchend',e=>{if(!start||!gameStarted)return;const t=e.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;start=null;if(Math.max(Math.abs(dx),Math.abs(dy))<18)return;const k=Math.abs(dx)>Math.abs(dy)?(dx>0?'arrowright':'arrowleft'):(dy>0?'arrowdown':'arrowup');keys[k]=true;setTimeout(()=>{keys[k]=false},180);},{passive:true});})();
+document.querySelectorAll('[data-move]').forEach(b=>{const k={up:'arrowup',down:'arrowdown',left:'arrowleft',right:'arrowright'}[b.dataset.move];const on=e=>{e.preventDefault();try{b.setPointerCapture(e.pointerId)}catch(_){}playSound('tap');keys[k]=true},off=e=>{e.preventDefault();keys[k]=false};b.addEventListener('pointerdown',on);['pointerup','pointercancel','pointerleave','lostpointercapture'].forEach(ev=>b.addEventListener(ev,off));b.addEventListener('contextmenu',e=>e.preventDefault())});document.getElementById('mobileInteract').addEventListener('click',()=>{if(gameStarted){playSound('tap');interact()}});document.getElementById('resetBtn').addEventListener('click',()=>{playSound('tap');reset()});document.getElementById('restartWin').addEventListener('click',()=>{playSound('tap');if(lives<=0){document.getElementById('winOverlay').classList.add('hidden');startFresh();return}if(phase>=20){try{localStorage.removeItem(SAVE_KEY)}catch(e){}document.getElementById('winOverlay').classList.add('hidden');document.getElementById('comicEnding')?.classList.remove('hidden');return}else{phase=Math.min(20,phase+1);elapsed=0;keys={};generatePhase();startedAt=performance.now();won=false;gameStarted=true;document.getElementById('winOverlay').classList.add('hidden');showToast('Fase '+phase+' de 20. Novo labirinto!');saveGame()}});document.getElementById('menuReturnBtn').addEventListener('click',returnToMenu);const returnHome=document.getElementById('returnHome');if(returnHome)returnHome.addEventListener('click',returnToMenu);document.getElementById('soundToggle').addEventListener('click',()=>{soundEnabled=!soundEnabled;document.getElementById('soundToggle').textContent=soundEnabled?'🔊 Som: ligado':'🔇 Som: desligado';if(soundEnabled){playSound('tap');if(gameStarted)startSuspenseMusic();else startMenuMusic()}else stopSuspenseMusic()});try{playerName=localStorage.getItem(PLAYER_KEY)||''}catch(e){}const playerPrompt=document.getElementById('playerNamePrompt');if(playerName&&playerPrompt)playerPrompt.classList.add('hidden');const nameSubmit=document.getElementById('confirmPlayerName');if(nameSubmit)nameSubmit.addEventListener('click',startFresh);const nameInput=document.getElementById('playerNameInput');if(nameInput)nameInput.addEventListener('keydown',e=>{if(e.key==='Enter')startFresh()});document.getElementById('startAdventure').addEventListener('click',startFresh);const comicContinue=document.getElementById('comicIntroContinue');if(comicContinue)comicContinue.addEventListener('click',finishComicIntro);const comicClose=document.getElementById('comicIntroClose');if(comicClose)comicClose.addEventListener('click',finishComicIntro);if(continueButton)continueButton.addEventListener('click',continueGame);const endingContinue=document.getElementById('comicEndingContinue');if(endingContinue)endingContinue.addEventListener('click',()=>{document.getElementById('comicEnding')?.classList.add('hidden');phase=1;elapsed=0;gameStarted=false;titleScreen.classList.remove('hidden');refreshContinueButton();returnToMenu()});
 function reset(){elapsed=0;startedAt=performance.now();gameStarted=true;generatePhase();document.getElementById('winOverlay').classList.add('hidden');updateUI();showToast('Fase '+phase+' reiniciada. Encontre as quatro alavancas.');saveGame();}
 function move(dt){if(won||vortexStarted)return;let dx=0,dy=0;if(keys.w||keys.arrowup)dy--;if(keys.s||keys.arrowdown)dy++;if(keys.a||keys.arrowleft)dx--;if(keys.d||keys.arrowright)dx++;if(dx&&dy){dx*=.7071;dy*=.7071}const speed=player.speed*(performance.now()<speedBoostUntil?2:1)*dt;const nx=player.x+dx*speed,ny=player.y+dy*speed;const r=player.r;if(!wallAt(nx-r,player.y-r)&&!wallAt(nx+r,player.y-r)&&!wallAt(nx-r,player.y+r)&&!wallAt(nx+r,player.y+r))player.x=nx;if(!wallAt(player.x-r,ny-r)&&!wallAt(player.x+r,ny-r)&&!wallAt(player.x-r,ny+r)&&!wallAt(player.x+r,ny+r))player.y=ny;}
 function glow(x,y,r,color,a=1){const g=ctx.createRadialGradient(x,y,1,x,y,r);const m=/^#([0-9a-f]{6})ALPHA$/i.exec(color);if(m){const n=parseInt(m[1],16),rr=(n>>16)&255,gg=(n>>8)&255,bb=n&255;g.addColorStop(0,`rgba(${rr},${gg},${bb},${.38*a})`);g.addColorStop(1,`rgba(${rr},${gg},${bb},0)`)}else{g.addColorStop(0,color);g.addColorStop(1,'rgba(0,0,0,0)')}ctx.globalAlpha=1;ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
@@ -351,7 +388,18 @@ function drawForestAmbience(t){
  for(let i=0;i<16;i++){const x=(i*179+Math.sin(t+i)*18+930)%930,y=(i*113+Math.cos(t*.8+i)*15+930)%930;ctx.fillStyle='rgba(149,255,150,.65)';ctx.shadowColor='#80ff9d';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(x,y,1.2,0,Math.PI*2);ctx.fill()}ctx.shadowBlur=0;
  const v=ctx.createRadialGradient(465,465,200,465,465,670);v.addColorStop(0,'rgba(3,5,12,0)');v.addColorStop(1,'rgba(0,0,4,.6)');ctx.fillStyle=v;ctx.fillRect(0,0,930,930);
 }
-function render(t){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#050a0b';ctx.fillRect(0,0,canvas.width,canvas.height);drawForestAmbience(t);for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(map[y][x])drawWall(x,y);else drawFloor(x,y)}drawTorches(t);iceCoins.forEach(c=>drawIceCoin(c,t));speedBoots.forEach(b=>drawSpeedBoot(b,t));specialPowers.forEach(p=>drawSpecialPower(p,t));freezeFlakes.forEach(f=>drawFreezeFlake(f,t));mysteryBoxes.forEach(b=>drawMysteryBox(b,t));drawPortal(t);levers.forEach((l,i)=>drawLever(l,i,t));spiders.forEach(s=>drawSpider(s,t));drawSpawnBeam();if(frozenNow()){ctx.save();ctx.fillStyle='rgba(74,190,255,.25)';ctx.fillRect(0,0,canvas.width,canvas.height);for(let i=0;i<34;i++){const sx=((i*137+Math.sin(t*1.4+i)*22)%canvas.width+canvas.width)%canvas.width;const sy=((i*83+t*45)%canvas.height);ctx.fillStyle='rgba(226,250,255,.8)';ctx.beginPath();ctx.arc(sx,sy,1.5+(i%3),0,Math.PI*2);ctx.fill();}ctx.strokeStyle='rgba(190,242,255,.7)';ctx.lineWidth=2;ctx.strokeRect(4,4,canvas.width-8,canvas.height-8);ctx.restore();}drawPlayer();
+function render(t){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#050a0b';ctx.fillRect(0,0,canvas.width,canvas.height);drawForestAmbience(t);for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(map[y][x])drawWall(x,y);else drawFloor(x,y)}drawTorches(t);iceCoins.forEach(c=>drawIceCoin(c,t));speedBoots.forEach(b=>drawSpeedBoot(b,t));specialPowers.forEach(p=>drawSpecialPower(p,t));freezeFlakes.forEach(f=>drawFreezeFlake(f,t));mysteryBoxes.forEach(b=>drawMysteryBox(b,t));drawPortal(t);levers.forEach((l,i)=>drawLever(l,i,t));spiders.forEach(s=>drawSpider(s,t));
+if(phase===20&&shadowBoss&&shadowBoss.alive){
+ const now=performance.now(),bx=shadowBoss.x*T,by=shadowBoss.y*T,solid=now>=shadowBoss.blinkUntil&&!shadowBoss.blinking;
+ ctx.save();ctx.globalAlpha=solid?1:.42+Math.sin(now/55)*.25;ctx.shadowColor=solid?'#9d4edd':'#c084fc';ctx.shadowBlur=solid?30:12;
+ const r=T*1.35;ctx.fillStyle=solid?'#090711':'#5b21b6';ctx.beginPath();ctx.ellipse(bx,by,r*.72,r*1.15,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#030207';ctx.beginPath();ctx.moveTo(bx-r*.55,by-r*.4);ctx.lineTo(bx-r*.95,by-r*1.25);ctx.lineTo(bx-r*.2,by-r*.8);ctx.lineTo(bx+r*.15,by-r*1.3);ctx.lineTo(bx+r*.85,by-r*.9);ctx.lineTo(bx+r*.55,by-r*.35);ctx.closePath();ctx.fill();
+ ctx.fillStyle=solid?'#e879f9':'#a78bfa';ctx.fillRect(bx-r*.38,by-r*.2,r*.22,T*.12);ctx.fillRect(bx+r*.16,by-r*.2,r*.22,T*.12);
+ ctx.restore();ctx.fillStyle='#fff';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText('LUAN SOMBRIO '+shadowBoss.hp+'/100',bx,by-r*1.45);
+ ctx.fillStyle='#24122e';ctx.fillRect(bx-r,by-r*1.3,T*2,5);ctx.fillStyle='#e879f9';ctx.fillRect(bx-r,by-r*1.3,T*2*shadowBoss.hp/100,5);
+}
+if(performance.now()<laserUntil&&phase>=17){ctx.save();ctx.globalCompositeOperation='lighter';const px=player.x*T,py=player.y*T,ex=px+playerFacing.x*T*10,ey=py+playerFacing.y*T*10;ctx.strokeStyle='#ff4dff';ctx.lineWidth=15;ctx.shadowColor='#b026ff';ctx.shadowBlur=28;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(ex,ey);ctx.stroke();ctx.strokeStyle='#e7ffff';ctx.lineWidth=4;ctx.shadowColor='#9dfcff';ctx.shadowBlur=18;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(ex,ey);ctx.stroke();ctx.restore();}
+drawSpawnBeam();if(frozenNow()){ctx.save();ctx.fillStyle='rgba(74,190,255,.25)';ctx.fillRect(0,0,canvas.width,canvas.height);for(let i=0;i<34;i++){const sx=((i*137+Math.sin(t*1.4+i)*22)%canvas.width+canvas.width)%canvas.width;const sy=((i*83+t*45)%canvas.height);ctx.fillStyle='rgba(226,250,255,.8)';ctx.beginPath();ctx.arc(sx,sy,1.5+(i%3),0,Math.PI*2);ctx.fill();}ctx.strokeStyle='rgba(190,242,255,.7)';ctx.lineWidth=2;ctx.strokeRect(4,4,canvas.width-8,canvas.height-8);ctx.restore();}drawPlayer();
  // A cada três fases muda a atmosfera cromática do cenário.
  const theme=Math.floor((phase-1)/3)%6;
  const tints=['rgba(0,0,0,0)','rgba(12,35,95,.19)','rgba(0,105,100,.18)','rgba(125,32,8,.20)','rgba(100,20,135,.20)','rgba(120,75,8,.20)'];
@@ -359,9 +407,19 @@ function render(t){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='
  if(vortexStarted){ctx.save();ctx.translate(portal.x*T,portal.y*T);ctx.rotate(t*11);ctx.strokeStyle='#f1c5ff';ctx.lineWidth=4;for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(0,0,24+i*8,16+i*5,t+i,0,Math.PI*1.55);ctx.stroke()}ctx.restore();}}
 function autoActivateLevers(){levers.forEach((l,i)=>{if(!activated[i]&&Math.hypot(player.x-l.x,player.y-l.y)<.72){activated[i]=true;playSound('lever');showToast('Alavanca '+(i+1)+' ativada ao passar!');updateUI();saveGame();}});if(activated.every(Boolean)&&!vortexStarted){vortexStarted=performance.now();vortexSoundTimer=0;spiders.forEach(sp=>{sp.active=true;});mysteryBoxes.filter(b=>b.kind!=='jar'&&b.kind!=='mystery').forEach(b=>{b.opened=true;b.openAt=vortexStarted;});playSound('suction');showToast('VÓRTICE ABERTO! Primeiro, todas as aranhas serão sugadas!');}}
 function updateSpiders(now,dt){
+ if(phase===20&&shadowBoss&&shadowBoss.alive){
+  if(now>=shadowBoss.nextClones&&shadowBoss.clonesSpawned<5){
+   const count=Math.min(5-shadowBoss.clonesSpawned,5);
+   for(let k=0;k<count;k++){spiders.push({x:shadowBoss.x+(Math.random()-.5)*4,y:shadowBoss.y+(Math.random()-.5)*4,homeX:-100-k,homeY:-100-k,active:true,delay:0,shadowClone:true});}
+   shadowBoss.clonesSpawned+=count;shadowBoss.nextClones=Infinity;showToast('O Luan de Sombras invocou 5 clones!');shadowBoss.solidUntil=now+2500;
+  }
+  if(now<shadowBoss.blinkUntil)shadowBoss.blinking=true;
+  else if(shadowBoss.solidUntil&&now<shadowBoss.solidUntil)shadowBoss.blinking=false;
+  else {shadowBoss.blinking=(Math.floor(now/650)%2===0);if(!shadowBoss.blinking)shadowBoss.solidUntil=now+900;}
+ }
  const vortexAge=vortexStarted?now-vortexStarted:0;
  for(let i=0;i<spiders.length;i++){
-  const s=spiders[i],b=mysteryBoxes.find(q=>q.kind===s.kind&&Math.abs(q.x-s.homeX)<.01&&Math.abs(q.y-s.homeY)<.01);
+  const s=spiders[i],b=mysteryBoxes.find(q=>Math.abs(q.x-s.homeX)<.01&&Math.abs(q.y-s.homeY)<.01);
   if(vortexStarted){
    // The vortex reaches every spider, regardless of its location in the maze.
    if(s.active){const dx=portal.x-s.x,dy=portal.y-s.y,d=Math.hypot(dx,dy)||1;const speed=7+Math.max(0,2-d)*3;s.x+=dx/d*speed*dt;s.y+=dy/d*speed*dt;if(d<.7)s.active=false;}
@@ -370,13 +428,27 @@ function updateSpiders(now,dt){
   if(!s.active&&now>=s.delay){s.active=true;if(b){b.opened=true;b.openAt=now;}playSound('hurt');showToast('Uma aranha saiu de uma caixa misteriosa!');}
   if(s.active&&!frozenNow()){const dx=player.x-s.x,dy=player.y-s.y,d=Math.hypot(dx,dy)||1;const speed=phase>8?1.2:.78;s.x+=dx/d*speed*dt;s.y+=dy/d*speed*dt;if(d<.48&&now-(s.lastHit||0)>1800){s.lastHit=now;loseLife();s.x=s.homeX;s.y=s.homeY;}}
  }
- const chest=mysteryBoxes[0];if(chest&&!chest.resolved&&Math.hypot(player.x-chest.x,player.y-chest.y)<.78)resolveSurpriseChest(chest);
+ for(const chest of mysteryBoxes){
+  if(chest.content==='secret'&&!chest.resolved){
+   // O baú secreto permanece fechado até o jogador passar perto dele.
+   const distance=Math.hypot(player.x-chest.x,player.y-chest.y);
+   if(distance<0.72){
+    chest.opened=true;chest.resolved=true;chest.openAt=now;chest.content='secret-collected';
+    totalScore+=100;phaseItems++;
+    if(typeof lives==='number')lives=Math.min(5,lives+1);
+    playSound('power');updateUI();
+    showToast('✨ BAÚ SECRETO! Item coletado: +100 pontos e +1 vida!');
+   }
+   continue;
+  }
+  if(!chest.resolved&&now>=(chest.autoOpenAt||Infinity))resolveSurpriseChest(chest);
+ }
 }
 
 function drawMysteryBox(b,t){if(b.resolved&&b.content!=='monster')return;const x=b.x*T,y=b.y*T;const opening=b.opened?Math.min(1,Math.max(0,(performance.now()-(b.openAt||performance.now()))/550)):0;glow(x,y,55,b.opened?'#ff6a9dALPHA':'#a84dffALPHA',.72);ctx.save();ctx.translate(x,y);ctx.fillStyle='rgba(0,0,0,.7)';ctx.beginPath();ctx.ellipse(2,13,23,10,0,0,Math.PI*2);ctx.fill();const wood=ctx.createLinearGradient(-17,-14,17,15);wood.addColorStop(0,b.opened?'#493040':'#76502e');wood.addColorStop(.45,b.opened?'#261724':'#4b2d24');wood.addColorStop(1,'#17111d');ctx.fillStyle=wood;ctx.fillRect(-17,-12,34,27);ctx.fillStyle='#a97a4e';ctx.fillRect(-17,-15,34,7);ctx.fillStyle='#d0a66b';ctx.fillRect(-15,-14,30,2);ctx.strokeStyle='#d8b77b';ctx.lineWidth=1.5;ctx.strokeRect(-17,-15,34,30);ctx.fillStyle='#b7a0c8';ctx.fillRect(-16,-14,4,5);ctx.fillRect(12,-14,4,5);ctx.fillRect(-16,10,4,5);ctx.fillRect(12,10,4,5);ctx.strokeStyle='#1b1220';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-10,-5);ctx.lineTo(10,-5);ctx.stroke();if(b.kind==='jar'){ctx.fillStyle='#b7f5ff';ctx.shadowColor='#60dfff';ctx.shadowBlur=10;ctx.beginPath();ctx.moveTo(-7,-7);ctx.lineTo(-5,-12);ctx.lineTo(5,-12);ctx.lineTo(7,-7);ctx.lineTo(9,8);ctx.quadraticCurveTo(0,15,-9,8);ctx.closePath();ctx.fill();ctx.fillStyle='#8b5b18';ctx.beginPath();for(let i=0;i<7;i++)ctx.arc(-5+(i%4)*3,2+Math.floor(i/4)*4,1.6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4ffff';ctx.font='bold 8px Segoe UI,Arial';ctx.fillText(b.opened?'70':'70',0,-1);ctx.shadowBlur=0;}else{ctx.fillStyle='#fff0ff';ctx.font='bold 24px Segoe UI, Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#d34cff';ctx.shadowBlur=12;ctx.fillText(b.opened?'!':'?',0,1);}if(b.kind!=='jar'&&b.kind!=='mystery'){ctx.save();ctx.translate(0,12);ctx.rotate(-opening*1.05);ctx.fillStyle='#69432b';ctx.strokeStyle='#d8b77b';ctx.lineWidth=1.5;ctx.fillRect(-17,-2,34,8);ctx.strokeRect(-17,-2,34,8);ctx.strokeStyle='#a97a4e';ctx.beginPath();ctx.moveTo(-11,1);ctx.lineTo(11,1);ctx.stroke();ctx.restore();}ctx.restore()}
 function drawSpider(s,t){
- if(!s.active)return;if(performance.now()<stunUntil)return;const box=mysteryBoxes.find(q=>q.kind===s.kind&&Math.abs(q.x-s.homeX)<.01&&Math.abs(q.y-s.homeY)<.01);const emergence=box&&box.opened?Math.min(1,Math.max(0,(performance.now()-(box.openAt||performance.now()))/550)):1;const x=s.x*T,y=s.y*T-(1-emergence)*T*.62,kind=s.kind||monsterKindForPhase();
- const palette={spider:{glow:'#ff3f78ALPHA',body:'#552033',core:'#ff416e',limb:'#ff7b9d'},skeleton:{glow:'#e6e0c4ALPHA',body:'#6d6a5e',core:'#fff0c4',limb:'#d6d0b7'},slime:{glow:'#4dff9aALPHA',body:'#176b4b',core:'#6dffad',limb:'#7cffbd'},wisp:{glow:'#57cfffALPHA',body:'#1c4778',core:'#9cf5ff',limb:'#63dfff'},shadow:{glow:'#bd4cffALPHA',body:'#27123e',core:'#d77cff',limb:'#bd73ff'}};
+ if(!s.active)return;if(performance.now()<stunUntil)return;const box=mysteryBoxes.find(q=>Math.abs(q.x-s.homeX)<.01&&Math.abs(q.y-s.homeY)<.01);const emergence=box&&box.opened?Math.min(1,Math.max(0,(performance.now()-(box.openAt||performance.now()))/550)):1;const x=s.x*T,y=s.y*T-(1-emergence)*T*.62,kind=s.kind||monsterKindForPhase();
+ const palette={spider:{glow:'#ff3f78ALPHA',body:'#552033',core:'#ff416e',limb:'#ff7b9d'},skeleton:{glow:'#e6e0c4ALPHA',body:'#6d6a5e',core:'#fff0c4',limb:'#d6d0b7'},slime:{glow:'#4dff9aALPHA',body:'#176b4b',core:'#6dffad',limb:'#7cffbd'},wisp:{glow:'#57cfffALPHA',body:'#1c4778',core:'#9cf5ff',limb:'#63dfff'},shadow:{glow:'#bd4cffALPHA',body:'#27123e',core:'#d77cff',limb:'#bd73ff'},golem:{glow:'#ff9d42ALPHA',body:'#59351e',core:'#ffd08a',limb:'#d78a45'}};
  const p=palette[kind]||palette.spider;glow(x,y,34,p.glow,.9);ctx.save();ctx.translate(x,y);
  if(kind==='spider'){
   ctx.strokeStyle=p.limb;ctx.lineWidth=3;for(let i=0;i<4;i++){const yy=(i-1.5)*5;ctx.beginPath();ctx.moveTo(-5,yy);ctx.lineTo(-14,yy-5);ctx.lineTo(-18,yy+((i%2)?5:-5));ctx.moveTo(5,yy);ctx.lineTo(14,yy-5);ctx.lineTo(18,yy+((i%2)?5:-5));ctx.stroke()}

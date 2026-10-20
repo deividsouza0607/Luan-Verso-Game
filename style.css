@@ -445,3 +445,694 @@ body { padding-left: max(6px, env(safe-area-inset-left)); padding-right: max(6px
 
 /* Epílogo em quadrinhos */
 .comic-ending-card{width:min(1250px,100%);max-height:96vh;overflow:auto;gap:12px;padding:8px}.ending-comic{width:100%;padding:clamp(10px,2vw,22px);background:radial-gradient(ellipse at top,#21104b,#070813 72%);border:2px solid #a855f7;border-radius:12px;box-shadow:0 0 36px #8b5cf688;color:#fff}.ending-title{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:5px 4px 14px;border-bottom:2px solid #9333ea;margin-bottom:12px}.ending-title span{font-size:clamp(24px,4vw,48px);font-weight:1000;font-style:italic;letter-spacing:.04em;color:#d8b4fe;text-shadow:0 0 18px #a855f7}.ending-title b{font-size:clamp(11px,1.5vw,18px);color:#67e8f9}.ending-panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.ending-panel{position:relative;min-height:175px;padding:13px 11px 10px;overflow:hidden;border:3px solid #e9d5ff;border-radius:4px;background:linear-gradient(145deg,#17142e,#090b1b 65%,#30104d);display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 0 0 24px #7c3aed33}.ending-panel p{position:relative;z-index:1;margin:0;background:#fff0bd;color:#171126;padding:8px;font-size:clamp(10px,1.1vw,14px);font-weight:1000;line-height:1.3;transform:rotate(-1deg)}.ending-panel small{position:relative;z-index:1;font-size:clamp(10px,1vw,13px);font-weight:800;color:#f5eaff;text-shadow:0 2px 4px #000}.panel-number{position:absolute;right:7px;top:5px;color:#c4b5fd;font-weight:900}.panel-art{align-self:center;font-size:clamp(42px,6vw,78px);color:#c084fc;text-shadow:0 0 25px #a855f7;filter:drop-shadow(0 0 8px #7c3aed);padding:8px}.skyline{font-size:clamp(54px,7vw,90px);filter:drop-shadow(0 0 12px #60a5fa)}.sigil-art{font-size:clamp(65px,8vw,100px);color:#67e8f9;text-shadow:0 0 25px #06b6d4}.triple-portals{font-size:clamp(25px,4vw,50px);white-space:nowrap;color:#e879f9}.shadow-art{font-size:clamp(80px,11vw,130px);color:#f0abfc;text-shadow:0 0 30px #a21caf}.final-portal{font-size:clamp(20px,3vw,34px);font-weight:1000;letter-spacing:.1em;border:4px double #d8b4fe;border-radius:50%;padding:25px 10px;box-shadow:0 0 25px #a855f7,inset 0 0 25px #7c3aed;text-align:center}.ending-tagline{text-align:center;margin-top:12px;color:#e9d5ff;font-weight:1000;letter-spacing:.08em;font-size:clamp(10px,1.3vw,15px)}@media(max-width:650px){.ending-panels{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.ending-panel{min-height:155px;padding:8px}.ending-panel p{font-size:10px}.ending-comic{padding:8px}.ending-title{padding-bottom:8px}}
+
+/* Ajustes finais de responsividade e controles touch para celulares e tablets */
+html{ -webkit-text-size-adjust:100%; }
+button{ -webkit-tap-highlight-color:transparent; }
+.mobile-controls button{touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; min-width:46px; min-height:44px;}
+@media (pointer:coarse), (max-width:700px){
+ body{padding-left:max(6px,env(safe-area-inset-left));padding-right:max(6px,env(safe-area-inset-right));}
+ .mobile-controls{display:flex;position:sticky;bottom:0;z-index:50;width:100%;max-width:560px;margin:8px auto 0;padding:10px 8px calc(10px + env(safe-area-inset-bottom));justify-content:space-between;gap:18px;background:linear-gradient(180deg,rgba(8,7,17,.05),rgba(8,7,17,.97) 25%);}
+ .mobile-controls .dpad{display:flex;flex-direction:column;align-items:center;gap:5px;}
+ .mobile-controls .dpad>div{display:flex;gap:5px;}
+ .mobile-controls button{width:clamp(46px,13vw,58px);height:clamp(44px,11vw,54px);font-size:21px;border-radius:12px;box-shadow:0 4px 0 #482364,0 0 12px #8b2be044;}
+ .mobile-controls .interact{width:auto;min-width:clamp(125px,35vw,190px);height:52px;font-size:clamp(11px,3vw,14px);font-weight:900;}
+ .scene-wrap canvas{touch-action:none;}
+ .sound-toggle{z-index:60;bottom:calc(10px + env(safe-area-inset-bottom));right:8px;}
+}
+@media (orientation:landscape) and (max-height:560px) and (pointer:coarse){
+ body{padding:4px 5px 0;} .topbar{display:flex;flex-direction:row;padding:2px 4px 5px;}
+ .brand .sigil{width:28px;height:28px;font-size:18px;} .brand h1{font-size:15px;} .brand p{font-size:7px;} .status{padding:4px 7px;font-size:9px;}
+ .game-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,27%);gap:6px;}
+ .scene-wrap{width:auto;max-height:calc(100dvh - 78px);max-width:calc(100dvh - 78px);margin:0 auto;}
+ .sidebar{display:none;} .mobile-controls{position:fixed;left:0;right:0;bottom:0;max-width:none;margin:0;padding:4px 12px calc(4px + env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,#080711 35%);pointer-events:none;}
+ .mobile-controls button{pointer-events:auto;width:42px;height:38px;min-height:38px;font-size:17px;} .mobile-controls .interact{height:40px;min-width:118px;}
+ .sound-toggle{bottom:4px;right:4px;} .game-shell footer{display:none;}
+}
+
+
+/* Tela inicial responsiva: mantém arte completa e transforma os hotspots em botões legíveis no celular. */
+.title-screen{overflow:auto;overflow-x:hidden;padding:0;align-items:center;justify-items:center;overscroll-behavior:contain}
+.menu-art-stage-full{width:min(100vw,177.7778vh);height:min(100dvh,56.25vw);max-width:100vw;max-height:100dvh;flex-shrink:0}
+.menu-art-full{object-fit:contain;object-position:center;background:#06040e}
+.menu-hotspot{min-width:0;min-height:44px;font-size:clamp(10px,.95vw,15px);padding:4px 7px;line-height:1.1;white-space:normal}
+.password-entry{max-width:calc(100% - 16px);box-sizing:border-box}
+@media(max-width:700px){
+ .title-screen{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding:0 0 max(8px,env(safe-area-inset-bottom));background:#03030a}
+ .menu-art-stage-full{width:100vw;height:auto;aspect-ratio:16/9;max-height:none;flex:0 0 auto;overflow:visible}
+ .menu-art-full{width:100%;height:100%;object-fit:contain;object-position:top center}
+ .menu-click-zones{position:absolute;inset:0}
+ .menu-hotspot{left:5%;width:29%;height:auto;min-height:clamp(42px,8vw,54px);border-radius:10px;padding:7px 4px;font-size:clamp(10px,2.8vw,14px);letter-spacing:.2px}
+ .menu-hotspot-start{top:58%;}
+ .menu-hotspot-exit{top:70%;}
+ .password-entry{position:relative;left:auto;top:auto;transform:none;width:min(92vw,420px);max-width:92vw;margin:10px auto 8px;padding:10px 12px;flex-shrink:0}
+ .password-entry label{font-size:11px}
+ .password-entry input{font-size:16px;min-height:42px}
+ .password-entry-row button{min-width:48px;min-height:42px}
+ .player-name-prompt{position:fixed;max-height:calc(100dvh - 24px);overflow:auto;width:min(88vw,400px);box-sizing:border-box}
+ #menuNotice{max-width:92vw;text-align:center;margin:4px auto}
+}
+@media(max-width:380px){
+ .menu-hotspot{width:32%;left:3%;min-height:40px;font-size:10px}
+ .menu-hotspot-start{top:57%}.menu-hotspot-exit{top:68%}
+ .password-entry{margin-top:6px;padding:8px}
+}
+@media(orientation:landscape) and (max-height:500px) and (pointer:coarse){
+ .title-screen{overflow-y:auto}
+ .menu-art-stage-full{width:min(100vw,177.7778vh);height:min(100dvh,56.25vw);aspect-ratio:16/9;flex:0 0 auto}
+ .menu-hotspot{min-height:36px;font-size:clamp(9px,1.8vh,12px)}
+ .password-entry{width:min(300px,44vw);margin:4px auto;padding:6px 8px}
+ .password-entry label{font-size:9px;margin-bottom:3px}
+ .password-entry input,.password-entry-row button{min-height:32px;padding:5px;font-size:13px}
+}
+
+
+/* Centralização reforçada para menu inicial e janelas em dispositivos móveis. */
+@media (max-width:700px), (pointer:coarse){
+  .title-screen{width:100%;min-height:100dvh;box-sizing:border-box;align-items:center;justify-content:center;text-align:center;}
+  .menu-art-stage-full{margin-left:auto;margin-right:auto;align-self:center;}
+  .menu-click-zones{left:0;right:0;margin-inline:auto;}
+  .menu-hotspot{left:50%;transform:translateX(-50%);width:min(58%,280px);max-width:calc(100% - 28px);box-sizing:border-box;display:flex;align-items:center;justify-content:center;text-align:center;}
+  .menu-hotspot-start{top:58%;}
+  .menu-hotspot-exit{top:71%;}
+  .password-entry{left:auto;right:auto;align-self:center;margin-left:auto;margin-right:auto;text-align:center;}
+  .password-entry-row{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;}
+  .player-name-prompt{left:50%;top:50%;transform:translate(-50%,-50%);margin:0;}
+  .comic-intro,.comic-ending,.modal,.overlay{align-items:center;justify-content:center;}
+  .comic-intro-card,.comic-ending-card{margin-inline:auto;}
+  #menuNotice{width:calc(100% - 24px);margin-inline:auto;text-align:center;}
+}
+@media(max-width:380px){
+  .menu-hotspot{width:min(66%,260px);left:50%;font-size:11px;}
+  .menu-hotspot-start{top:57%;}.menu-hotspot-exit{top:70%;}
+  .player-name-prompt{width:calc(100vw - 28px);}
+}
+
+
+/* Ajuste fino para viewport mobile de 415 px e larguras próximas. */
+@media screen and (max-width: 415px) {
+  html, body { width:100%; min-width:0; overflow-x:hidden; }
+  .game-shell, .title-screen, .menu-container, .menu, .overlay, .modal,
+  .comic-intro, .comic-ending, .comic-intro-card, .comic-ending-card,
+  .player-name-prompt {
+    box-sizing:border-box;
+    max-width:100vw;
+  }
+  .title-screen {
+    width:100%;
+    min-height:100dvh;
+    padding-left:12px;
+    padding-right:12px;
+    align-items:center;
+    justify-content:center;
+  }
+  .menu-art-stage-full {
+    width:100%;
+    max-width:415px;
+    margin-inline:auto;
+  }
+  .menu-hotspot {
+    left:50%;
+    width:min(72%,290px);
+    max-width:calc(100% - 24px);
+    transform:translateX(-50%);
+    min-height:44px;
+    padding:8px 10px;
+    font-size:clamp(12px,3.2vw,14px);
+    overflow-wrap:anywhere;
+  }
+  .menu-hotspot-start { top:58%; }
+  .menu-hotspot-exit { top:71%; }
+  .password-entry {
+    width:100%;
+    max-width:380px;
+    margin:10px auto;
+    padding:10px;
+  }
+  .password-entry-row { width:100%; justify-content:center; }
+  .password-entry input { min-width:0; width:100%; box-sizing:border-box; }
+  .player-name-prompt {
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:calc(100vw - 28px);
+    max-width:380px;
+    margin:0;
+  }
+  .comic-intro-card, .comic-ending-card, .modal, .overlay {
+    width:calc(100vw - 20px);
+    max-width:395px;
+    margin-inline:auto;
+  }
+  .mobile-controls { padding-left:10px; padding-right:10px; }
+  img, canvas, video { max-width:100%; }
+}
+
+/* Ajuste final mobile: composição vertical 9:16 e menus empilhados */
+@media (max-width: 560px) and (orientation: portrait) {
+  .title-screen { display:flex; align-items:stretch; justify-content:center; overflow-y:auto; overflow-x:hidden; background:#03020a; }
+  .menu-art-stage { width:100vw; height:100dvh; min-height:100svh; aspect-ratio:9/16; max-width:100vw; flex:0 0 auto; overflow:hidden; }
+  .menu-art { inset:0; width:100%; height:100%; object-fit:cover; object-position:center; filter:blur(3px) brightness(.25) saturate(.9); transform:scale(1.04); }
+  .menu-shade { background:linear-gradient(180deg,rgba(3,2,10,.35) 0%,rgba(5,2,14,.55) 28%,rgba(5,2,14,.83) 60%,rgba(3,2,9,.97) 100%); }
+  .menu-portal-glow { width:78vw; right:50%; top:23%; transform:translate(50%,-50%); opacity:.72; }
+  .menu-content { position:absolute; left:18px; right:18px; top:47%; bottom:auto; width:auto; max-height:51%; overflow-y:auto; padding:0 2px max(16px,env(safe-area-inset-bottom)); transform:translateY(-10%); text-align:center; scrollbar-width:thin; }
+  .menu-kicker { justify-content:center; margin-bottom:12px; font-size:9px; letter-spacing:1.7px; }
+  .menu-title-lockup { padding-left:0; border-left:0; }
+  .menu-emblem { margin:0 auto 10px; }
+  .menu-overline { font-size:9px; letter-spacing:2px; }
+  .menu-title-lockup h2 { font-size:clamp(34px,10vw,48px); line-height:.98; letter-spacing:-1px; }
+  .menu-subtitle { max-width:340px; margin:10px auto 0; font-size:11px; line-height:1.45; }
+  .menu-actions { display:flex; flex-direction:column; align-items:stretch; width:min(100%,360px); margin:16px auto 0; gap:8px; }
+  .menu-action { display:flex; width:100%; min-height:49px; padding:8px 12px; flex-direction:row; text-align:left; border-radius:10px; }
+  .button-symbol { width:30px; height:30px; flex-basis:30px; }
+  .menu-action strong { font-size:10px; }
+  .menu-action small { font-size:8px; margin-top:3px; }
+  .menu-footer { justify-content:center; flex-wrap:wrap; margin-top:12px; font-size:8px; letter-spacing:1px; }
+}
+@media (max-width: 380px) and (orientation: portrait) {
+  .menu-content { left:12px; right:12px; top:43%; max-height:56%; transform:translateY(-5%); }
+  .menu-title-lockup h2 { font-size:clamp(31px,9.5vw,38px); }
+  .menu-subtitle { font-size:10px; }
+  .menu-action { min-height:45px; }
+}
+
+
+/* MOBILE GAMEPLAY: labirinto maior, HUD compacto e sem rolagem da página */
+@media (max-width: 560px) and (orientation: portrait) and (pointer: coarse) {
+  html, body {
+    width:100%; height:100%; min-height:100%; min-height:100dvh;
+    margin:0; padding:0 !important; overflow:hidden !important;
+    overscroll-behavior:none; touch-action:pan-x pan-y;
+  }
+  .game-shell {
+    width:100vw; height:100vh; height:100dvh; min-height:0 !important;
+    padding:0 0 calc(env(safe-area-inset-bottom)); margin:0;
+    display:flex; flex-direction:column; gap:0; overflow:hidden; box-sizing:border-box;
+  }
+  .topbar {
+    flex:0 0 auto; padding:3px 8px 4px !important; margin:0;
+    display:flex; flex-direction:row !important; align-items:center; justify-content:space-between; gap:5px;
+  }
+  .brand { gap:5px; min-width:0; }
+  .brand .sigil { width:24px !important; height:24px !important; font-size:15px !important; }
+  .brand h1 { margin:0; font-size:12px !important; line-height:1.05; letter-spacing:.5px; }
+  .brand p { margin:1px 0 0; font-size:6px !important; letter-spacing:1px; }
+  .status { align-self:auto !important; max-width:58%; padding:4px 6px !important; font-size:8px !important; line-height:1.15; text-align:right; }
+  .outside-hud {
+    flex:0 0 auto; display:flex !important; flex-wrap:nowrap !important; align-items:center;
+    gap:3px !important; margin:0 !important; padding:3px 5px !important;
+    border-radius:0 !important; overflow:hidden !important; border-left:0 !important; border-right:0 !important;
+  }
+  .outside-stat { flex:1 1 0 !important; min-width:0 !important; padding:3px 2px !important; gap:3px !important; justify-content:center; }
+  .outside-icon { font-size:12px !important; line-height:1; }
+  .outside-stat small { font-size:6px !important; line-height:1; letter-spacing:0 !important; }
+  .outside-stat strong { font-size:9px !important; line-height:1.1; letter-spacing:0 !important; white-space:nowrap; }
+  .return-home-button { order:0 !important; flex:0 0 auto; width:auto !important; min-height:25px !important; padding:3px 5px !important; font-size:7px !important; white-space:nowrap; }
+  .speed-stat, .power-status-panel { display:none !important; }
+  .game-layout {
+    flex:1 1 auto !important; min-height:0 !important; height:auto !important;
+    width:100%; margin:0 !important; padding:0 !important; display:flex !important;
+    flex-direction:column !important; align-items:center; justify-content:center; gap:0 !important;
+    overflow:hidden !important;
+  }
+  .scene-wrap {
+    flex:0 1 auto !important; width:min(100vw, calc(100dvh - 148px)) !important;
+    height:auto !important; max-width:100vw !important; max-height:calc(100dvh - 148px) !important;
+    aspect-ratio:1/1 !important; margin:0 auto !important; align-self:center !important;
+    border-radius:7px !important; overflow:hidden !important;
+  }
+  #game { display:block; width:100% !important; height:100% !important; max-width:100% !important; object-fit:contain; }
+  .mobile-controls {
+    position:fixed !important; left:0 !important; right:0 !important; bottom:0 !important;
+    flex:0 0 auto; padding:3px 8px calc(3px + env(safe-area-inset-bottom)) !important;
+    margin:0 !important; min-height:0 !important; gap:5px !important;
+    background:linear-gradient(180deg,transparent 0%,rgba(8,7,17,.96) 22%) !important;
+  }
+  .mobile-controls button { width:36px !important; height:32px !important; min-height:32px !important; padding:2px !important; font-size:15px !important; }
+  .mobile-controls .interact { width:auto !important; min-width:96px !important; height:33px !important; min-height:33px !important; font-size:10px !important; }
+  .sound-toggle { right:4px !important; bottom:calc(3px + env(safe-area-inset-bottom)) !important; transform:scale(.78); transform-origin:bottom right; }
+  .game-shell footer, .sidebar { display:none !important; }
+}
+@media (max-width: 380px) and (orientation: portrait) and (pointer: coarse) {
+  .topbar { padding:2px 5px 3px !important; }
+  .brand h1 { font-size:11px !important; }
+  .outside-hud { gap:2px !important; padding:2px 3px !important; }
+  .outside-stat small { font-size:5.5px !important; }
+  .outside-stat strong { font-size:8px !important; }
+  .return-home-button { font-size:6px !important; padding:2px 3px !important; }
+  .scene-wrap { width:min(100vw, calc(100dvh - 132px)) !important; max-height:calc(100dvh - 132px) !important; }
+  .mobile-controls button { width:33px !important; height:30px !important; min-height:30px !important; }
+  .mobile-controls .interact { min-width:88px !important; }
+}
+
+/* Exibe somente uma versão dos quadrinhos por dispositivo.
+   A regra usa seletor mais específico que .comic-intro-card img. */
+#comicIntro .mobile-comic-art,
+#comicEnding .mobile-ending-art { display: none !important; }
+#comicIntro .desktop-comic-art,
+#comicEnding .ending-comic { display: block; }
+
+/* Quadrinhos verticais dedicados à experiência mobile */
+.mobile-comic-art,.mobile-ending-art{display:none}
+@media (max-width: 600px), (pointer: coarse) and (max-width: 900px){
+  #comicIntro .comic-intro-card,#comicEnding .comic-intro-card{
+    width:min(96vw, 520px); max-width:96vw; max-height:94dvh;
+    overflow-y:auto; overflow-x:hidden; padding:8px;
+    box-sizing:border-box; margin:auto; gap:8px;
+  }
+  #comicIntro .desktop-comic-art{display:none !important}
+  #comicIntro .mobile-comic-art{display:block !important;width:100%;height:auto;max-height:none;object-fit:contain;border-radius:8px}
+  #comicEnding .ending-comic{display:none !important}
+  #comicEnding .mobile-ending-art{display:block !important;width:100%;height:auto;max-height:none;object-fit:contain;border-radius:8px}
+  #comicIntro .comic-intro-continue,#comicEnding .comic-intro-continue{width:100%;min-height:48px;margin:0 auto}
+}
+
+/* Laser de combate desbloqueado na fase 17; botão compacto para mobile. */
+.mobile-laser{display:none;border:1px solid #f0abfc;border-radius:12px;padding:12px 16px;background:linear-gradient(135deg,#6d28d9,#be185d);color:#fff;font-weight:900;box-shadow:0 0 16px #a855f777;touch-action:manipulation}
+@media(max-width:700px){.mobile-laser{display:block;min-height:42px;font-size:13px}.mobile-controls{gap:8px}}
+
+
+/* Responsividade de apresentação: não altera fluxo, botões nem lógica do jogo. */
+@media (max-width: 900px) {
+  html, body { width:100%; min-width:0; overflow-x:hidden; }
+  body { padding:0; }
+  .title-screen { position:fixed; inset:0; width:100vw; height:100dvh; min-height:0; overflow:hidden; }
+  .menu-art-stage { max-width:100vw; max-height:100dvh; }
+  .game-shell, .game-container, main { max-width:100%; }
+  .topbar { flex-wrap:wrap; gap:6px; }
+  .scene-wrap { width:min(94vw, calc(100dvh - 190px)); max-width:100%; margin-inline:auto; }
+  canvas { max-width:100%; height:auto; }
+  .outside-hud { flex-wrap:wrap; justify-content:center; }
+  button, input { max-width:100%; }
+  #comicIntro, #comicEnding { padding:8px; }
+  #comicIntro .comic-intro-card, #comicEnding .comic-intro-card {
+    width:min(96vw, 680px); max-width:96vw; max-height:94dvh; overflow:auto;
+  }
+}
+@media (max-width: 600px) {
+  .scene-wrap { width:min(96vw, calc(100dvh - 205px)); }
+  .mobile-controls { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+  .mobile-controls button { min-width:42px; min-height:40px; }
+  .mobile-controls .interact { min-width:100px; }
+  .topbar { padding:5px; }
+  .brand h1 { font-size:clamp(12px, 3.5vw, 18px); }
+  .outside-stat strong { font-size:clamp(10px, 3vw, 14px); }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .topbar { padding:2px 5px; gap:3px; }
+  .scene-wrap { width:min(62vw, calc(100dvh - 95px)); max-height:calc(100dvh - 95px); }
+  .mobile-controls button { min-height:32px; padding:4px 8px; }
+  #comicIntro .comic-intro-card, #comicEnding .comic-intro-card { max-height:96dvh; }
+}
+
+/* Mobile/tablet: maze gets the available screen; directional arrow pad removed. */
+@media (max-width: 850px) {
+  .game-layout { display:flex !important; flex-direction:column !important; gap:4px !important; }
+  .scene-wrap {
+    width: min(96vw, calc(100dvh - 105px)) !important;
+    height: min(96vw, calc(100dvh - 105px)) !important;
+    max-width: 96vw !important;
+    max-height: calc(100dvh - 105px) !important;
+    margin: 0 auto !important;
+    flex: 0 0 auto !important;
+  }
+  .scene-wrap canvas { width:100% !important; height:100% !important; object-fit:contain; }
+  .mobile-controls .dpad { display:none !important; }
+  .mobile-controls { justify-content:center !important; position:relative !important; margin:4px auto 0 !important; padding:4px !important; background:transparent !important; }
+  .mobile-controls .interact { min-width:100px !important; width:auto !important; }
+  .sidebar { display:none !important; }
+}
+@media (max-width: 850px) and (orientation: landscape) {
+  .scene-wrap {
+    width: min(82vh, calc(100vw - 20px)) !important;
+    height: min(82vh, calc(100vw - 20px)) !important;
+    max-height: 82vh !important;
+  }
+}
+
+/* Responsivo: estica o quadro do labirinto na vertical até perto dos menus. */
+@media (max-width: 850px) and (orientation: portrait) {
+  body { padding: 2px !important; }
+  .topbar { padding-top: 2px !important; padding-bottom: 3px !important; margin-bottom: 2px !important; }
+  .game-layout { gap: 1px !important; }
+  .scene-wrap {
+    width: min(98vw, calc((100dvh - 112px) * 0.72)) !important;
+    height: calc(100dvh - 112px) !important;
+    max-width: 98vw !important;
+    max-height: calc(100dvh - 112px) !important;
+    margin: 0 auto !important;
+    flex: 0 0 auto !important;
+  }
+  .scene-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+  }
+  .mobile-controls { margin-top: 1px !important; padding-top: 1px !important; padding-bottom: 1px !important; }
+}
+@media (max-width: 850px) and (orientation: landscape) {
+  .scene-wrap {
+    height: calc(100dvh - 64px) !important;
+    max-height: calc(100dvh - 64px) !important;
+    width: min(72vw, calc((100dvh - 64px) * 0.72)) !important;
+    max-width: 98vw !important;
+  }
+  .scene-wrap canvas { width:100% !important; height:100% !important; object-fit:fill !important; }
+}
+
+/* Emblema do menu inicial, sem alterar a lógica do jogo. */
+#titleScreen .menu-emblem-top {
+  position: absolute;
+  z-index: 3;
+  top: clamp(8px, 2vh, 22px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(64vw, 390px);
+  max-height: 24vh;
+  object-fit: contain;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  #titleScreen .menu-emblem-top {
+    top: max(6px, env(safe-area-inset-top));
+    width: min(57vw, 260px);
+    max-height: 19vh;
+  }
+}
+
+
+/* Menu inicial: centralizado e fixo; somente a arte do labirinto fica ao fundo. */
+#titleScreen .menu-art-stage-full {
+  position: relative !important;
+  overflow: hidden !important;
+  background: #05020b !important;
+}
+#titleScreen .menu-art-full {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  z-index: 0 !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+#titleScreen .menu-art-stage-full::before,
+#titleScreen .menu-art-stage-full::after {
+  content: none !important;
+  display: none !important;
+}
+#titleScreen .portal-spin,
+#titleScreen .menu-vortex-motion,
+#titleScreen .menu-vortex-secondary {
+  display: none !important;
+}
+#titleScreen .menu-emblem-top {
+  position: absolute !important;
+  z-index: 4 !important;
+  top: clamp(8px, 2vh, 22px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(52vw, 320px) !important;
+  max-height: 19vh !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+}
+#titleScreen .menu-click-zones {
+  position: absolute !important;
+  z-index: 6 !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: min(86vw, 360px) !important;
+  max-width: calc(100% - 24px) !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+#titleScreen .menu-click-zones .menu-hotspot {
+  width: 100% !important;
+  min-height: 46px !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+#titleScreen .password-entry {
+  position: absolute !important;
+  z-index: 6 !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  width: min(86vw, 360px) !important;
+  max-width: calc(100% - 24px) !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 700px) {
+  #titleScreen .menu-emblem-top {
+    width: min(48vw, 220px) !important;
+    max-height: 16vh !important;
+    top: max(6px, env(safe-area-inset-top)) !important;
+  }
+  #titleScreen .menu-click-zones {
+    top: 48% !important;
+    width: min(84vw, 330px) !important;
+    gap: 8px !important;
+  }
+  #titleScreen .menu-click-zones .menu-hotspot {
+    min-height: 42px !important;
+    padding: 8px 12px !important;
+  }
+  #titleScreen .password-entry {
+    width: min(84vw, 330px) !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  }
+}
+@media (max-width: 390px) and (max-height: 740px) {
+  #titleScreen .menu-click-zones { top: 45% !important; gap: 6px !important; }
+  #titleScreen .menu-click-zones .menu-hotspot { min-height: 38px !important; }
+}
+
+
+/* Correção do menu: fundo removido e botões sempre em coluna, sem sobreposição. */
+#titleScreen .menu-art-stage-full {
+  background: radial-gradient(ellipse at center, #170d25 0%, #08040f 58%, #020106 100%) !important;
+}
+#titleScreen .menu-art-full,
+#titleScreen .menu-art-stage-full::before,
+#titleScreen .menu-art-stage-full::after,
+#titleScreen .portal-spin,
+#titleScreen .menu-vortex-motion,
+#titleScreen .menu-vortex-secondary {
+  display: none !important;
+}
+#titleScreen .menu-click-zones {
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: min(84vw, 350px) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-width: calc(100% - 28px) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+#titleScreen .menu-click-zones .menu-hotspot {
+  position: relative !important;
+  inset: auto !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 46px !important;
+  margin: 0 !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+#titleScreen .password-entry {
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: max(10px, env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  width: min(84vw, 350px) !important;
+  max-width: calc(100% - 28px) !important;
+  box-sizing: border-box !important;
+  z-index: 8 !important;
+}
+@media (max-width: 700px) {
+  #titleScreen .menu-click-zones {
+    top: 48% !important;
+    width: min(82vw, 330px) !important;
+    gap: 9px !important;
+  }
+  #titleScreen .menu-click-zones .menu-hotspot {
+    min-height: 42px !important;
+  }
+}
+@media (max-width: 390px) and (max-height: 740px) {
+  #titleScreen .menu-click-zones {
+    top: 45% !important;
+    gap: 7px !important;
+  }
+  #titleScreen .menu-click-zones .menu-hotspot {
+    min-height: 38px !important;
+  }
+}
+
+
+/* Remove somente o painel/retângulo atrás dos botões, preservando as áreas clicáveis. */
+#titleScreen .menu-click-zones {
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#titleScreen .menu-click-zones::before,
+#titleScreen .menu-click-zones::after {
+  content: none !important;
+  display: none !important;
+}
+
+
+/* Fundo ilustrado do labirinto atrás de toda a interface do jogo. */
+#gameScreen,
+#gameScreen .game-layout,
+#gameScreen .scene-wrap {
+  position: relative;
+}
+#gameScreen {
+  isolation: isolate;
+  background: #05040a !important;
+}
+#gameScreen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("assets/labirinto_fundo.webp");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+#gameScreen .scene-wrap {
+  background: transparent !important;
+}
+
+
+/* Garantir que a imagem do labirinto seja o fundo real da tela de jogo. */
+#gameScreen {
+  background-image: url("assets/labirinto_fundo.webp") !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+#gameScreen::before {
+  content: none !important;
+  display: none !important;
+}
+
+
+/* Tela inicial: labirinto e chefe final Luan Verso do Mal como fundo. */
+#titleScreen .menu-art-stage-full {
+  position: relative !important;
+  overflow: hidden !important;
+  background: #05020b url("assets/menu_chefe_luan_mal.webp") center center / cover no-repeat !important;
+}
+#titleScreen .menu-art-full,
+#titleScreen .menu-art-stage-full::before,
+#titleScreen .menu-art-stage-full::after,
+#titleScreen .portal-spin,
+#titleScreen .menu-vortex-motion,
+#titleScreen .menu-vortex-secondary {
+  display: none !important;
+}
+#titleScreen .menu-emblem-top { display: none !important; }
+#titleScreen .menu-click-zones {
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 66% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: min(32vw, 360px) !important;
+  max-width: calc(100% - 24px) !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+#titleScreen .menu-click-zones .menu-hotspot {
+  position: relative !important;
+  inset: auto !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  min-height: 46px !important;
+  height: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+#titleScreen .password-entry {
+  position: absolute !important;
+  z-index: 8 !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 4% !important;
+  transform: translateX(-50%) !important;
+  width: min(34vw, 380px) !important;
+  max-width: calc(100% - 24px) !important;
+  box-sizing: border-box !important;
+  background: rgba(7, 3, 20, .94) !important;
+}
+@media (max-width: 700px) {
+  #titleScreen .menu-click-zones {
+    top: 64% !important;
+    width: min(78vw, 340px) !important;
+    gap: 8px !important;
+  }
+  #titleScreen .menu-click-zones .menu-hotspot { min-height: 42px !important; }
+  #titleScreen .password-entry {
+    width: min(80vw, 350px) !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  }
+}

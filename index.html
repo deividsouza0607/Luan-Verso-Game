@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#090712">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,7 +13,8 @@
 <body>
 <div class="title-screen" id="titleScreen" role="dialog" aria-modal="true" aria-label="Menu inicial Luan Verso Portal">
   <div class="menu-art-stage menu-art-stage-full">
-    <img class="menu-art menu-art-full" src="assets/menu_labirinto_portal.png" alt="Luan Verso Portal, labirinto de pedra com portal roxo e personagem aventureiro." />
+    <img class="menu-emblem-top" src="assets/luan_verso_emblema.webp" alt="Luan Verso — Labirinto do Portal" />
+    <img class="menu-art menu-art-full" src="assets/menu_labirinto_portal.webp" alt="Luan Verso Portal, labirinto de pedra com portal roxo e personagem aventureiro." />
     <div class="portal-spin menu-vortex-motion" aria-hidden="true"></div>
     <div class="portal-spin menu-vortex-secondary vortex-two" aria-hidden="true"></div>
     <div class="portal-spin menu-vortex-secondary vortex-three" aria-hidden="true"></div>
@@ -35,12 +36,12 @@
 <div id="comicIntro" class="comic-intro hidden" role="dialog" aria-modal="true" aria-label="Introdução em quadrinhos de Luan Verso">
   <div class="comic-intro-card">
     <button id="comicIntroClose" class="comic-intro-close" type="button" aria-label="Pular introdução">PULAR ×</button>
-    <img src="assets/introducao_quadrinhos.png" alt="História em quadrinhos: Luan encontra o Espelho Roxo, atravessa um portal dimensional e precisa vencer 20 labirintos, enfrentando múmias e usando poderes especiais." />
+    <img class="mobile-comic-art" src="assets/introducao_quadrinhos_mobile.webp" alt="História em quadrinhos: Luan encontra o Espelho Roxo." /><img class="desktop-comic-art" src="assets/introducao_quadrinhos.webp" alt="História em quadrinhos: Luan encontra o Espelho Roxo, atravessa um portal dimensional e precisa vencer 20 labirintos, enfrentando múmias e usando poderes especiais." />
     <button id="comicIntroContinue" class="comic-intro-continue" type="button">ENTRAR NO PORTAL E COMEÇAR</button>
   </div>
 </div>
 
-<div id="comicEnding" class="comic-intro hidden" role="dialog" aria-modal="true" aria-label="Continuação da história em quadrinhos"><div class="comic-intro-card comic-ending-card"><div class="ending-comic"><header class="ending-title"><span>LUAN VERSO</span><b>CAPÍTULO 02 — A FENDA ENTRE MUNDOS</b></header><section class="ending-panels"><article class="ending-panel"><span class="panel-number">01</span><p>DEPOIS DE VENCER OS 20 LABIRINTOS, LUAN ATRAVESSOU O ÚLTIMO PORTAL…</p><div class="panel-art">🌀</div><small>O brilho roxo ficou para trás.</small></article><article class="ending-panel"><span class="panel-number">02</span><p>MAS ELE NÃO VOLTOU PARA CASA.</p><div class="panel-art skyline">🏰</div><small>À sua frente surgiu uma cidade suspensa entre as estrelas.</small></article><article class="ending-panel"><span class="panel-number">03</span><p>UM SINAL DESCONHECIDO ACENDEU EM SUA MOCHILA.</p><div class="panel-art sigil-art">◉</div><small>“LUAN… SE VOCÊ ESTÁ VENDO ISTO, O EQUILÍBRIO FOI ROMPIDO.”</small></article><article class="ending-panel"><span class="panel-number">04</span><p>NO CÉU, TRÊS PORTAIS SE ABRIRAM AO MESMO TEMPO.</p><div class="panel-art triple-portals">◉　◉　◉</div><small>De cada um vinha um som diferente: rugidos, passos e sussurros.</small></article><article class="ending-panel"><span class="panel-number">05</span><p>UMA VOZ ECOOU NA ESCURIDÃO…</p><div class="panel-art shadow-art">?</div><small>“O Espelho Roxo era apenas a primeira fechadura.”</small></article><article class="ending-panel"><span class="panel-number">06</span><p>LUAN APERTOU AS ALÇAS DA MOCHILA E DEU UM PASSO ADIANTE.</p><div class="panel-art final-portal">PORTAL II</div><small>CONTINUA… A PRÓXIMA AVENTURA ESTÁ MAIS PERTO DO QUE PARECE.</small></article></section><div class="ending-tagline">NENHUM PORTAL É O FIM. CADA RESPOSTA ABRE UM NOVO MISTÉRIO.</div></div><button id="comicEndingContinue" class="comic-intro-continue" type="button">VOLTAR AO MENU</button></div></div>
+<div id="comicEnding" class="comic-intro hidden" role="dialog" aria-modal="true" aria-label="Continuação da história em quadrinhos"><div class="comic-intro-card comic-ending-card"><img class="mobile-ending-art" src="assets/final_quadrinhos_mobile.webp" alt="História em quadrinhos do final: Luan vence o Guardião e descobre uma nova jornada." /><div class="ending-comic"><header class="ending-title"><span>LUAN VERSO</span><b>CAPÍTULO 02 — A FENDA ENTRE MUNDOS</b></header><section class="ending-panels"><article class="ending-panel"><span class="panel-number">01</span><p>DEPOIS DE VENCER OS 20 LABIRINTOS, LUAN ATRAVESSOU O ÚLTIMO PORTAL…</p><div class="panel-art">🌀</div><small>O brilho roxo ficou para trás.</small></article><article class="ending-panel"><span class="panel-number">02</span><p>MAS ELE NÃO VOLTOU PARA CASA.</p><div class="panel-art skyline">🏰</div><small>À sua frente surgiu uma cidade suspensa entre as estrelas.</small></article><article class="ending-panel"><span class="panel-number">03</span><p>UM SINAL DESCONHECIDO ACENDEU EM SUA MOCHILA.</p><div class="panel-art sigil-art">◉</div><small>“LUAN… SE VOCÊ ESTÁ VENDO ISTO, O EQUILÍBRIO FOI ROMPIDO.”</small></article><article class="ending-panel"><span class="panel-number">04</span><p>NO CÉU, TRÊS PORTAIS SE ABRIRAM AO MESMO TEMPO.</p><div class="panel-art triple-portals">◉　◉　◉</div><small>De cada um vinha um som diferente: rugidos, passos e sussurros.</small></article><article class="ending-panel"><span class="panel-number">05</span><p>UMA VOZ ECOOU NA ESCURIDÃO…</p><div class="panel-art shadow-art">?</div><small>“O Espelho Roxo era apenas a primeira fechadura.”</small></article><article class="ending-panel"><span class="panel-number">06</span><p>LUAN APERTOU AS ALÇAS DA MOCHILA E DEU UM PASSO ADIANTE.</p><div class="panel-art final-portal">PORTAL II</div><small>CONTINUA… A PRÓXIMA AVENTURA ESTÁ MAIS PERTO DO QUE PARECE.</small></article></section><div class="ending-tagline">NENHUM PORTAL É O FIM. CADA RESPOSTA ABRE UM NOVO MISTÉRIO.</div></div><button id="comicEndingContinue" class="comic-intro-continue" type="button">VOLTAR AO MENU</button></div></div>
 
 <div class="game-shell">
   <header class="topbar">
