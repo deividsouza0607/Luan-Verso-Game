@@ -1,0 +1,12 @@
+{
+  "name": "Luan Verso Labirinto do Portal",
+  "short_name": "Luan Verso",
+  "description": "Aventura de labirinto mágico com portal violeta, quatro alavancas e 20 fases.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080711",
+  "theme_color": "#090712",
+  "icons": [{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

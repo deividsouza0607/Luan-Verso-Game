@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#090712">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml"><title>Luan Verso — Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="title-screen" id="titleScreen" role="dialog" aria-modal="true" aria-label="Menu inicial Luan Verso Portal">
+  <div class="menu-art-stage menu-art-stage-full">
+    <img class="menu-art menu-art-full" src="assets/menu_labirinto_portal.png" alt="Luan Verso Portal, labirinto de pedra com portal roxo e personagem aventureiro." />
+    <div class="portal-spin menu-vortex-motion" aria-hidden="true"></div>
+    <div class="portal-spin menu-vortex-secondary vortex-two" aria-hidden="true"></div>
+    <div class="portal-spin menu-vortex-secondary vortex-three" aria-hidden="true"></div>
+    <div class="portal-spin menu-vortex-secondary vortex-four" aria-hidden="true"></div>
+    <div class="menu-click-zones" aria-label="Opções do menu">
+      <button id="startAdventure" class="menu-hotspot menu-hotspot-start" aria-label="Iniciar jogo" title="Iniciar jogo"><strong>INICIAR JOGO</strong></button>
+      <button id="menuExit" class="menu-hotspot menu-hotspot-exit" aria-label="Sair" title="Sair"><strong>SAIR</strong></button>
+    </div>
+    <div class="password-entry" aria-label="Acessar fase com senha">
+      <label for="phasePassword">DESBLOQUEAR FASE</label>
+      <div class="password-entry-row"><input id="phasePassword" type="text" maxlength="20" autocomplete="off" placeholder="Digite o password" aria-label="Password da fase"><button id="unlockPhase" type="button">IR</button></div>
+      <small>Senha liberada ao concluir cada 3 fases.</small>
+    </div>
+    <div id="menuNotice" class="menu-notice" role="status" aria-live="polite"></div>
+    <div id="playerNamePrompt" class="player-name-prompt hidden"><label for="playerNameInput">COMO DEVEMOS CHAMAR VOCÊ?</label><input id="playerNameInput" maxlength="24" autocomplete="nickname" placeholder="Digite seu nome"><button id="confirmPlayerName" type="button">COMEÇAR A AVENTURA</button><small>Seu nome será lembrado neste dispositivo.</small></div>
+  </div>
+</div>
+
+<div id="comicIntro" class="comic-intro hidden" role="dialog" aria-modal="true" aria-label="Introdução em quadrinhos de Luan Verso">
+  <div class="comic-intro-card">
+    <button id="comicIntroClose" class="comic-intro-close" type="button" aria-label="Pular introdução">PULAR ×</button>
+    <img src="assets/introducao_quadrinhos.png" alt="História em quadrinhos: Luan encontra o Espelho Roxo, atravessa um portal dimensional e precisa vencer 20 labirintos, enfrentando múmias e usando poderes especiais." />
+    <button id="comicIntroContinue" class="comic-intro-continue" type="button">ENTRAR NO PORTAL E COMEÇAR</button>
+  </div>
+</div>
+
+<div id="comicEnding" class="comic-intro hidden" role="dialog" aria-modal="true" aria-label="Continuação da história em quadrinhos"><div class="comic-intro-card comic-ending-card"><div class="ending-comic"><header class="ending-title"><span>LUAN VERSO</span><b>CAPÍTULO 02 — A FENDA ENTRE MUNDOS</b></header><section class="ending-panels"><article class="ending-panel"><span class="panel-number">01</span><p>DEPOIS DE VENCER OS 20 LABIRINTOS, LUAN ATRAVESSOU O ÚLTIMO PORTAL…</p><div class="panel-art">🌀</div><small>O brilho roxo ficou para trás.</small></article><article class="ending-panel"><span class="panel-number">02</span><p>MAS ELE NÃO VOLTOU PARA CASA.</p><div class="panel-art skyline">🏰</div><small>À sua frente surgiu uma cidade suspensa entre as estrelas.</small></article><article class="ending-panel"><span class="panel-number">03</span><p>UM SINAL DESCONHECIDO ACENDEU EM SUA MOCHILA.</p><div class="panel-art sigil-art">◉</div><small>“LUAN… SE VOCÊ ESTÁ VENDO ISTO, O EQUILÍBRIO FOI ROMPIDO.”</small></article><article class="ending-panel"><span class="panel-number">04</span><p>NO CÉU, TRÊS PORTAIS SE ABRIRAM AO MESMO TEMPO.</p><div class="panel-art triple-portals">◉　◉　◉</div><small>De cada um vinha um som diferente: rugidos, passos e sussurros.</small></article><article class="ending-panel"><span class="panel-number">05</span><p>UMA VOZ ECOOU NA ESCURIDÃO…</p><div class="panel-art shadow-art">?</div><small>“O Espelho Roxo era apenas a primeira fechadura.”</small></article><article class="ending-panel"><span class="panel-number">06</span><p>LUAN APERTOU AS ALÇAS DA MOCHILA E DEU UM PASSO ADIANTE.</p><div class="panel-art final-portal">PORTAL II</div><small>CONTINUA… A PRÓXIMA AVENTURA ESTÁ MAIS PERTO DO QUE PARECE.</small></article></section><div class="ending-tagline">NENHUM PORTAL É O FIM. CADA RESPOSTA ABRE UM NOVO MISTÉRIO.</div></div><button id="comicEndingContinue" class="comic-intro-continue" type="button">VOLTAR AO MENU</button></div></div>
+
+<div class="game-shell">
+  <header class="topbar">
+    <div class="brand"><span class="sigil">◉</span><div><h1>LUAN VERSO</h1><p>PORTAL</p></div></div>
+    <div class="status"><span class="status-dot"></span><span id="statusText">Encontre as quatro alavancas</span></div>
+  </header>
+  <div class="outside-hud" aria-label="Status do personagem">
+    <div class="outside-stat lives-stat"><span class="outside-icon">♥</span><span><small>VIDAS</small><strong id="outsideLives">♥ ♥ ♥</strong></span></div>
+    <div class="outside-stat score-stat"><span class="outside-icon">★</span><span><small>PONTOS</small><strong id="outsideScore">0</strong></span></div>
+    <div class="outside-stat timer-stat"><span class="outside-icon">◷</span><span><small>TEMPO</small><strong id="sceneTimer">03:00</strong></span></div>
+    <div class="outside-stat ice-stat"><span class="outside-icon">❄</span><span><small>GELOS</small><strong id="iceCountHud">0</strong></span></div>
+    <button id="returnHome" class="return-home-button" type="button">↩ TELA INICIAL</button>
+    <div class="outside-stat speed-stat" id="speedStatus"><span class="outside-icon">👟</span><span><small>PÉ MÁGICO</small><strong id="speedTime">NORMAL</strong></span></div>
+    <div class="power-status-panel" id="powerStatusPanel"><small>MEUS PODERES</small><div id="powerStatusList">Nenhum poder ativo</div></div>
+  </div>
+  <main class="game-layout">
+    <section class="scene-wrap" aria-label="Luan Verso Labirinto do Portal">
+      <canvas id="game" width="930" height="930" aria-label="Labirinto visto de cima"></canvas>
+      <div class="win-overlay hidden" id="winOverlay"><div class="win-card"><div class="win-symbol">✧</div><h2 id="winTitle">FASE CONCLUÍDA!</h2><p id="winMessage">As quatro alavancas romperam o selo. O portal foi aberto.</p><div id="finalRanking" class="final-ranking hidden"><h3>RANKING DO JOGADOR</h3><p id="rankingSummary"></p><p><b>Conquistas:</b> <span id="rankingAchievements"></span></p><ol id="rankingList"></ol></div><div id="checkpointPassword" class="checkpoint-password hidden" aria-live="polite"><small>FASE 3 CONCLUÍDA — ANOTE SEU PASSWORD</small><strong id="checkpointCode">PORTAL4</strong><span>Guarde este código! Digite-o no menu inicial para acessar a próxima fase do checkpoint.</span></div><button id="restartWin">Próxima fase</button></div></div>
+    </section>
+  </main>
+  <footer>WALKS DRONE VIEW <span>•</span> Explore com cuidado. O Portal observa.</footer>
+</div>
+<button class="sound-toggle" id="soundToggle" aria-label="Ativar ou desativar sons" title="Ativar/desativar sons">🔊 Som: ligado</button>
+<div class="mobile-controls" aria-label="Controles para celular"><div class="dpad"><button data-move="up">▲</button><div><button data-move="left">◀</button><button data-move="down">▼</button><button data-move="right">▶</button></div></div><button class="interact" id="mobileInteract">INTERAGIR <b>E</b></button></div>
+<!-- Elementos internos necessários para a lógica do jogo; permanecem ocultos na interface. -->
+<div id="gameCompatibility" aria-hidden="true" style="display:none!important">
+  <div id="toast"></div>
+  <span id="phaseNumber">1</span><span id="hudHearts">♥ ♥ ♥</span>
+  <span id="progressLabel">0 / 4</span><span id="leverCount">0/4</span>
+  <span id="lifeCount">3</span><span id="coinCount">0</span>
+  <div id="progressFill"></div>
+  <span id="statusText">Encontre as quatro alavancas</span>
+  <span id="timer">03:00</span>
+  <button id="resetBtn" type="button">Reiniciar</button>
+  <button id="menuReturnBtn" type="button">Menu</button>
+  <span id="obj0"><i id="icon0"></i></span><span id="obj1"><i id="icon1"></i></span>
+  <span id="obj2"><i id="icon2"></i></span><span id="obj3"><i id="icon3"></i></span>
+  <span id="obj4"></span>
+</div>
+
+<script src="game.js"></script>
+<script>/* O jogo funciona sem service worker; isso evita falhas de cache em visualizadores locais/embutidos. Registre o SW somente após publicação HTTPS. */ if ("serviceWorker" in navigator && location.protocol === "https:") { window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(() => {})); }</script>
+</body></html>
