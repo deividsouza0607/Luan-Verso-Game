@@ -14,7 +14,7 @@ Jogo web responsivo feito com HTML, CSS e JavaScript. Esta edição foi preparad
 
 ## Controles
 - Computador: WASD ou setas para mover; `E`/`Enter` para interagir; `R` para reiniciar.
-- Celular/tablet: direcional na tela e botão **INTERAGIR**.
+- Celular/tablet: mantenha o dedo pressionado nas setas direcionais para caminhar; solte para parar. Use o botão de laser quando disponível. A pausa pode ser acionada pelo controle da interface ou pelas teclas compatíveis no computador.
 - O layout se adapta a telas estreitas, tablets, orientação retrato/paisagem e áreas seguras de iOS.
 
 ## Observações
@@ -42,3 +42,17 @@ A Fase 1 agora usa um desenho de labirinto determinístico: a primeira aventura 
 - Fases 13–15: golens.
 - Fases 16–18: monstros aleatórios de diferentes famílias.
 - Fases 19–20: vampiros e lobisomens.
+
+
+## Publicar no GitHub Pages
+1. Crie um repositório no GitHub.
+2. Envie o conteúdo desta pasta para a raiz do repositório (o arquivo `index.html` deve ficar na raiz).
+3. Em **Settings → Pages**, selecione **Deploy from a branch**, escolha a branch principal (`main`) e a pasta `/(root)`.
+4. Salve e aguarde o GitHub publicar o site.
+5. Se uma versão antiga continuar aparecendo, recarregue a página sem cache ou limpe os dados do site; o nome do cache offline foi atualizado nesta versão.
+
+## Otimização desta versão
+- Planos de fundo convertidos de PNG para WebP, mantendo transparência e reduzindo bastante o tamanho dos arquivos.
+- Trilhas MP3 reencodificadas a 128 kbps para reduzir o tamanho do repositório e acelerar o envio.
+- Service worker atualizado para armazenar os novos fundos e evitar reutilizar o cache antigo.
+- Todos os caminhos são relativos, adequados para publicação na raiz de um repositório GitHub Pages.

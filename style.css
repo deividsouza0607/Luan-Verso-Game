@@ -1771,7 +1771,7 @@ body { height: 100dvh !important; min-height: 0 !important; overflow: hidden !im
 /* FUNDO MÍSTICO NAS FASES — SOMENTE MODO RESPONSIVO */
 @media (max-width: 850px), (pointer: coarse) {
   body:has(#titleScreen.hidden) {
-    background-image: linear-gradient(rgba(3, 5, 15, .48), rgba(3, 5, 15, .58)), url('./assets/labirinto_mistico_responsivo.png') !important;
+    background-image: linear-gradient(rgba(3, 5, 15, .48), rgba(3, 5, 15, .58)), url('./assets/labirinto_mistico_responsivo.webp') !important;
     background-position: center center !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
@@ -1787,7 +1787,7 @@ body { height: 100dvh !important; min-height: 0 !important; overflow: hidden !im
 @media (min-width: 851px) and (pointer: fine) {
   body:has(#titleScreen.hidden) {
     background-color: #030711 !important;
-    background-image: linear-gradient(rgba(2, 4, 12, .35), rgba(2, 4, 12, .48)), url('./assets/labirinto_encantado_desktop.png') !important;
+    background-image: linear-gradient(rgba(2, 4, 12, .35), rgba(2, 4, 12, .48)), url('./assets/labirinto_encantado_desktop.webp') !important;
     background-position: center center !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
