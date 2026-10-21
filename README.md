@@ -56,3 +56,9 @@ A Fase 1 agora usa um desenho de labirinto determinístico: a primeira aventura 
 - Trilhas MP3 reencodificadas a 128 kbps para reduzir o tamanho do repositório e acelerar o envio.
 - Service worker atualizado para armazenar os novos fundos e evitar reutilizar o cache antigo.
 - Todos os caminhos são relativos, adequados para publicação na raiz de um repositório GitHub Pages.
+
+
+## Otimização de desempenho em celulares
+- O piso e as paredes do labirinto são desenhados uma única vez por fase em uma camada de cache, em vez de redesenhar centenas de blocos com gradientes a cada quadro.
+- A resolução interna do canvas é reduzida em telas com toque, preservando o enquadramento e melhorando a fluidez.
+- Atualizações de cronômetro e lista de poderes na interface são limitadas a quatro vezes por segundo para reduzir trabalho no navegador.

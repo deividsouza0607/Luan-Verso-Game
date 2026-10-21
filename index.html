@@ -11,26 +11,20 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="title-screen" id="titleScreen" role="dialog" aria-modal="true" aria-label="Menu inicial Luan Verso Portal">
-  <div class="menu-art-stage menu-art-stage-full">
-    <img class="menu-emblem-top" src="assets/luan_verso_emblema.webp" alt="Luan Verso — Labirinto do Portal" />
-    <img class="menu-art menu-art-full" src="assets/menu_labirinto_portal.webp" alt="Luan Verso Portal, labirinto de pedra com portal roxo e personagem aventureiro." />
-    <div class="portal-spin menu-vortex-motion" aria-hidden="true"></div>
-    <div class="portal-spin menu-vortex-secondary vortex-two" aria-hidden="true"></div>
-    <div class="portal-spin menu-vortex-secondary vortex-three" aria-hidden="true"></div>
-    <div class="portal-spin menu-vortex-secondary vortex-four" aria-hidden="true"></div>
-    <div class="menu-click-zones" aria-label="Opções do menu">
-      <button id="startAdventure" class="menu-hotspot menu-hotspot-start" aria-label="Iniciar jogo" title="Iniciar jogo"><strong>INICIAR JOGO</strong></button>
-      <button id="menuExit" class="menu-hotspot menu-hotspot-exit" aria-label="Sair" title="Sair"><strong>SAIR</strong></button>
+<div class="title-screen home-reset" id="titleScreen" role="dialog" aria-modal="true" aria-label="Menu inicial Luan Verso">
+  <div class="home-reset-placeholder" aria-hidden="true"></div>
+  <section class="home-menu-card" aria-label="Menu principal">
+    <div class="home-menu-kicker">CAPÍTULO 01</div>
+    <img class="home-menu-logo" src="assets/luan_verso_logo_oficial.png" alt="Luan Verso — Labirinto do Portal">
+    <button id="startAdventure" class="home-start-button" type="button">INICIAR PARTIDA</button>
+    <div class="home-password-area">
+      <label for="phasePassword">PASSWORD</label>
+      <div class="home-password-row"><input id="phasePassword" type="text" autocomplete="off" autocapitalize="characters" placeholder="Digite seu password" aria-label="Digite o password do checkpoint"><button id="unlockPhase" type="button">IR</button></div>
+      <small>Use o código recebido ao concluir um checkpoint.</small>
     </div>
-    <div class="password-entry" aria-label="Acessar fase com senha">
-      <label for="phasePassword">DESBLOQUEAR FASE</label>
-      <div class="password-entry-row"><input id="phasePassword" type="text" maxlength="20" autocomplete="off" placeholder="Digite o password" aria-label="Password da fase"><button id="unlockPhase" type="button">IR</button></div>
-      <small>Senha liberada ao concluir cada 3 fases.</small>
-    </div>
-    <div id="menuNotice" class="menu-notice" role="status" aria-live="polite"></div>
-    <div id="playerNamePrompt" class="player-name-prompt hidden"><label for="playerNameInput">COMO DEVEMOS CHAMAR VOCÊ?</label><input id="playerNameInput" maxlength="24" autocomplete="nickname" placeholder="Digite seu nome"><button id="confirmPlayerName" type="button">COMEÇAR A AVENTURA</button><small>Seu nome será lembrado neste dispositivo.</small></div>
-  </div>
+    <div id="menuNotice" role="status" aria-live="polite"></div>
+    <div id="playerNamePrompt" class="hidden home-player-prompt"><label for="playerNameInput">Como podemos chamar você?</label><input id="playerNameInput" type="text" maxlength="24" autocomplete="nickname" placeholder="Seu nome"><button id="confirmPlayerName" type="button">CONTINUAR</button></div>
+  </section>
 </div>
 
 <div id="comicIntro" class="comic-intro hidden" role="dialog" aria-modal="true" aria-label="Introdução em quadrinhos de Luan Verso">
@@ -76,7 +70,7 @@
   <span id="progressLabel">0 / 4</span><span id="leverCount">0/4</span>
   <span id="lifeCount">3</span><span id="coinCount">0</span>
   <div id="progressFill"></div>
-  <span id="statusText">Encontre as quatro alavancas</span>
+  <span id="statusTextCompat">Encontre as quatro alavancas</span>
   <span id="timer">03:00</span>
   <button id="resetBtn" type="button">Reiniciar</button>
   <button id="menuReturnBtn" type="button">Menu</button>

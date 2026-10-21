@@ -1797,3 +1797,564 @@ body { height: 100dvh !important; min-height: 0 !important; overflow: hidden !im
     background: transparent !important;
   }
 }
+
+
+/* MOBILE: impedir gesto de puxar para atualizar durante a partida */
+html, body { overscroll-behavior: none; }
+@media (max-width: 850px), (pointer: coarse) {
+  body:has(#titleScreen.hidden) {
+    overscroll-behavior: none !important;
+    touch-action: none !important;
+    -webkit-user-select: none; user-select: none;
+  }
+  body:has(#titleScreen.hidden) .game-shell,
+  body:has(#titleScreen.hidden) .scene-wrap,
+  body:has(#titleScreen.hidden) #game,
+  body:has(#titleScreen.hidden) .mobile-controls {
+    overscroll-behavior: none !important;
+    touch-action: none !important;
+  }
+}
+
+
+/* Correção definitiva do painel de password: áreas separadas, sem sobreposição. */
+#titleScreen .menu-art-stage-full {
+  min-height: 100dvh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+}
+#titleScreen .menu-click-zones {
+  top: 59% !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(32vw, 360px) !important;
+  gap: clamp(8px, 1.2vh, 14px) !important;
+}
+#titleScreen .menu-click-zones .menu-hotspot {
+  min-height: clamp(42px, 6vh, 54px) !important;
+  padding: 10px 14px !important;
+}
+#titleScreen .password-entry {
+  top: auto !important;
+  bottom: max(14px, env(safe-area-inset-bottom)) !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(34vw, 380px) !important;
+  padding: 12px 14px !important;
+  border: 1px solid rgba(190, 115, 255, .65) !important;
+  border-radius: 14px !important;
+  background: rgba(7, 3, 20, .96) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.38), 0 0 18px rgba(162,59,255,.16) !important;
+}
+#titleScreen .password-entry label,
+#titleScreen .password-entry small { display:block !important; }
+#titleScreen .password-entry-row {
+  display:flex !important;
+  align-items:stretch !important;
+  gap:8px !important;
+  width:100% !important;
+  margin:8px 0 5px !important;
+}
+#titleScreen .password-entry input {
+  flex:1 1 auto !important;
+  width:0 !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+}
+#titleScreen .password-entry-row button { flex:0 0 auto !important; min-width:54px !important; }
+#titleScreen .menu-notice {
+  position:absolute !important;
+  z-index:12 !important;
+  left:50% !important;
+  right:auto !important;
+  bottom:calc(max(14px, env(safe-area-inset-bottom)) + 112px) !important;
+  top:auto !important;
+  transform:translateX(-50%) !important;
+  width:min(34vw,380px) !important;
+  max-width:calc(100% - 28px) !important;
+  box-sizing:border-box !important;
+}
+@media (max-width: 700px) {
+  #titleScreen .menu-click-zones {
+    top: 57% !important;
+    width: min(82vw, 340px) !important;
+    gap: 8px !important;
+  }
+  #titleScreen .menu-click-zones .menu-hotspot { min-height: 44px !important; }
+  #titleScreen .password-entry {
+    width: min(86vw, 360px) !important;
+    bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    padding: 10px 12px !important;
+  }
+  #titleScreen .menu-notice {
+    width: min(86vw, 360px) !important;
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 116px) !important;
+  }
+}
+@media (max-width: 390px), (max-height: 650px) {
+  #titleScreen .menu-click-zones { top: 53% !important; gap: 6px !important; }
+  #titleScreen .menu-click-zones .menu-hotspot { min-height: 38px !important; padding: 7px 10px !important; }
+  #titleScreen .password-entry { padding: 8px 10px !important; }
+  #titleScreen .password-entry small { font-size: 10px !important; }
+}
+
+/* Menu inicial: botões em coluna, centralizados e sem sobrepor o painel de password. */
+#titleScreen .menu-click-zones {
+  position:absolute !important;
+  inset:0 !important;
+  z-index:8 !important;
+  pointer-events:none !important;
+}
+#titleScreen .menu-click-zones .menu-hotspot {
+  position:absolute !important;
+  left:50% !important;
+  right:auto !important;
+  width:min(320px, 78vw) !important;
+  height:auto !important;
+  min-height:44px !important;
+  box-sizing:border-box !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  pointer-events:auto !important;
+  z-index:9 !important;
+}
+#titleScreen .menu-click-zones .menu-hotspot-start { top:56% !important; }
+#titleScreen .menu-click-zones .menu-hotspot-exit { top:64% !important; }
+#titleScreen .password-entry {
+  z-index:11 !important;
+  left:50% !important;
+  right:auto !important;
+  bottom:max(10px, env(safe-area-inset-bottom)) !important;
+  top:auto !important;
+  transform:translateX(-50%) !important;
+  width:min(320px, 86vw) !important;
+  max-width:calc(100vw - 24px) !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+}
+#titleScreen .menu-notice {
+  z-index:12 !important;
+  left:50% !important;
+  right:auto !important;
+  top:auto !important;
+  bottom:calc(max(10px, env(safe-area-inset-bottom)) + 116px) !important;
+  transform:translateX(-50%) !important;
+  width:min(320px, 86vw) !important;
+  max-width:calc(100vw - 24px) !important;
+  box-sizing:border-box !important;
+}
+@media (max-height:650px) {
+  #titleScreen .menu-click-zones .menu-hotspot-start { top:49% !important; }
+  #titleScreen .menu-click-zones .menu-hotspot-exit { top:58% !important; }
+  #titleScreen .menu-click-zones .menu-hotspot { min-height:38px !important; }
+  #titleScreen .password-entry { padding:7px 9px !important; }
+  #titleScreen .password-entry small { font-size:9px !important; }
+  #titleScreen .menu-notice { bottom:calc(max(8px, env(safe-area-inset-bottom)) + 100px) !important; }
+}
+
+
+/* AJUSTE DEFINITIVO: todos os elementos do menu ficam dentro do quadro roxo */
+.title-screen{
+  position:fixed!important;inset:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:0!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+.title-screen.hidden{display:none!important}
+.menu-art-stage.menu-art-stage-full{
+  position:relative!important;
+  width:min(100vw,177.7778vh)!important;
+  height:min(100dvh,56.25vw)!important;
+  aspect-ratio:16/9!important;
+  flex:0 1 auto!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+.menu-click-zones{
+  position:absolute!important;inset:0!important;
+  display:block!important;z-index:8!important;
+  pointer-events:none!important;
+}
+.menu-hotspot{
+  position:absolute!important;left:50%!important;
+  transform:translateX(-50%)!important;
+  width:min(34%,300px)!important;min-width:0!important;
+  height:auto!important;min-height:38px!important;
+  padding:10px 12px!important;box-sizing:border-box!important;
+  pointer-events:auto!important;
+}
+.menu-hotspot-start{top:57%!important;bottom:auto!important}
+.menu-hotspot-exit{top:69%!important;bottom:auto!important}
+.password-entry{
+  position:absolute!important;left:50%!important;top:81%!important;bottom:auto!important;
+  transform:translateX(-50%)!important;
+  width:min(48%,360px)!important;max-width:calc(100% - 20px)!important;
+  box-sizing:border-box!important;z-index:10!important;
+}
+.menu-notice{
+  position:absolute!important;left:50%!important;top:76%!important;bottom:auto!important;
+  transform:translateX(-50%)!important;
+  width:min(70%,440px)!important;max-width:calc(100% - 20px)!important;
+  box-sizing:border-box!important;z-index:11!important;
+}
+.player-name-prompt{
+  position:absolute!important;left:50%!important;top:50%!important;bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:min(76%,430px)!important;max-width:calc(100% - 20px)!important;
+  max-height:85%!important;overflow:auto!important;box-sizing:border-box!important;
+  z-index:20!important;
+}
+@media(max-width:700px){
+ .menu-art-stage.menu-art-stage-full{
+   width:min(100vw,177.7778dvh)!important;
+   height:min(100dvh,56.25vw)!important;
+ }
+ .menu-hotspot{width:min(43%,250px)!important;min-height:32px!important;padding:7px 8px!important;font-size:clamp(9px,2.5vw,13px)!important}
+ .menu-hotspot-start{top:53%!important}
+ .menu-hotspot-exit{top:64%!important}
+ .menu-notice{top:72%!important;width:80%!important;font-size:10px!important}
+ .password-entry{top:79%!important;width:min(65%,330px)!important;padding:6px!important}
+ .password-entry label{font-size:9px!important;margin-bottom:3px!important}
+ .password-entry input{padding:6px!important;font-size:11px!important}
+ .password-entry button{padding:0 10px!important;font-size:10px!important}
+ .password-entry small{font-size:8px!important;margin-top:3px!important}
+}
+@media(max-height:520px){
+ .menu-hotspot-start{top:48%!important}
+ .menu-hotspot-exit{top:59%!important}
+ .menu-notice{top:68%!important}
+ .password-entry{top:76%!important;padding:4px!important}
+ .password-entry small{display:none!important}
+ .menu-hotspot{min-height:28px!important;padding:5px 8px!important}
+}
+
+
+/* RECONSTRUÇÃO DO MENU: controles contidos no painel central roxo da arte. */
+#titleScreen.title-screen{position:fixed!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;overflow:hidden!important;background:#03020a!important;}
+#titleScreen .menu-art-stage.menu-art-stage-full{position:relative!important;width:min(100vw,177.7778dvh)!important;height:min(100dvh,56.25vw)!important;aspect-ratio:16/9!important;flex:0 1 auto!important;overflow:hidden!important;isolation:isolate!important;}
+#titleScreen .menu-click-zones{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;padding:0!important;margin:0!important;display:block!important;pointer-events:none!important;background:transparent!important;border:0!important;box-shadow:none!important;}
+#titleScreen .menu-click-zones .menu-hotspot{position:absolute!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;width:28%!important;max-width:280px!important;min-width:0!important;height:auto!important;min-height:36px!important;padding:8px 12px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;white-space:normal!important;overflow-wrap:anywhere!important;pointer-events:auto!important;margin:0!important;}
+#titleScreen .menu-click-zones .menu-hotspot-start{top:59%!important;bottom:auto!important;}
+#titleScreen .menu-click-zones .menu-hotspot-exit{top:68%!important;bottom:auto!important;}
+#titleScreen .password-entry{position:absolute!important;left:50%!important;right:auto!important;top:78%!important;bottom:auto!important;transform:translateX(-50%)!important;width:29%!important;max-width:320px!important;min-width:0!important;padding:8px 10px!important;box-sizing:border-box!important;z-index:12!important;display:block!important;overflow:hidden!important;background:rgba(8,3,22,.97)!important;border:1px solid #9d38ff!important;border-radius:12px!important;}
+#titleScreen .password-entry label{display:block!important;font-size:clamp(8px,.75vw,11px)!important;line-height:1.2!important;margin:0 0 5px!important;}
+#titleScreen .password-entry-row{display:flex!important;align-items:center!important;gap:5px!important;width:100%!important;min-width:0!important;}
+#titleScreen .password-entry input{flex:1 1 auto!important;width:0!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;padding:7px!important;font-size:clamp(9px,.8vw,12px)!important;}
+#titleScreen .password-entry-row button{flex:0 0 auto!important;min-width:38px!important;padding:7px 9px!important;font-size:clamp(9px,.8vw,12px)!important;}
+#titleScreen .password-entry small{display:block!important;font-size:clamp(7px,.65vw,9px)!important;line-height:1.25!important;margin-top:5px!important;}
+#titleScreen .menu-notice{position:absolute!important;left:50%!important;right:auto!important;top:74%!important;bottom:auto!important;transform:translateX(-50%)!important;width:28%!important;max-width:320px!important;max-height:4%!important;overflow:hidden!important;text-align:center!important;box-sizing:border-box!important;z-index:13!important;font-size:clamp(8px,.7vw,10px)!important;}
+#titleScreen .player-name-prompt{position:absolute!important;left:50%!important;top:51%!important;bottom:auto!important;transform:translateX(-50%)!important;width:min(29%,320px)!important;max-width:calc(100% - 20px)!important;max-height:43%!important;overflow:auto!important;box-sizing:border-box!important;z-index:20!important;}
+@media(max-width:700px){
+ #titleScreen .menu-click-zones .menu-hotspot{width:40%!important;min-height:32px!important;padding:6px 8px!important;font-size:clamp(9px,2.6vw,12px)!important;}
+ #titleScreen .menu-click-zones .menu-hotspot-start{top:57%!important;}
+ #titleScreen .menu-click-zones .menu-hotspot-exit{top:66%!important;}
+ #titleScreen .password-entry{top:77%!important;width:42%!important;padding:6px 7px!important;}
+ #titleScreen .password-entry label{font-size:9px!important;margin-bottom:3px!important;}
+ #titleScreen .password-entry input,#titleScreen .password-entry-row button{padding:5px!important;font-size:10px!important;}
+ #titleScreen .password-entry small{font-size:8px!important;margin-top:3px!important;}
+ #titleScreen .menu-notice{top:73%!important;width:42%!important;max-height:3%!important;font-size:8px!important;}
+ #titleScreen .player-name-prompt{width:42%!important;max-height:45%!important;}
+}
+@media(max-height:520px){
+ #titleScreen .menu-click-zones .menu-hotspot{min-height:28px!important;padding:4px 7px!important;}
+ #titleScreen .menu-click-zones .menu-hotspot-start{top:55%!important;}
+ #titleScreen .menu-click-zones .menu-hotspot-exit{top:64%!important;}
+ #titleScreen .password-entry{top:74%!important;padding:4px 6px!important;}
+ #titleScreen .password-entry small{display:none!important;}
+ #titleScreen .menu-notice{top:70%!important;}
+}
+
+
+/* Tela inicial limpa para reconstrução visual */
+.title-screen.home-reset{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;padding:0;background:#080511;z-index:100;}
+.title-screen.home-reset .home-reset-placeholder{position:absolute;inset:0;background:radial-gradient(ellipse at center,#170b2c 0%,#080511 58%,#030207 100%);}
+.title-screen.home-reset .home-reset-compat{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0;pointer-events:none;}
+.title-screen.home-reset .home-reset-compat *{pointer-events:none!important;}
+
+/* Menu inicial reconstruído: conteúdo em coluna, centralizado e responsivo. */
+.title-screen.home-reset{position:fixed!important;inset:0!important;width:100%;height:100dvh;min-height:0;display:grid!important;place-items:center!important;box-sizing:border-box;overflow:auto!important;overflow-x:hidden!important;padding:20px 14px max(20px,env(safe-area-inset-bottom))!important;background:#05030c!important;z-index:10000;}
+.title-screen.home-reset .home-reset-placeholder{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,2,12,.46),rgba(4,2,12,.70)),url("assets/menu_launch_background.webp") center center / cover no-repeat;pointer-events:none;}
+.home-menu-card{position:relative;z-index:1;width:min(100%,440px);box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;gap:14px;padding:clamp(22px,5vw,34px);border:1px solid rgba(184,92,255,.85);border-radius:22px;background:linear-gradient(155deg,rgba(26,12,47,.97),rgba(7,5,18,.98));box-shadow:0 0 0 4px rgba(113,35,191,.12),0 0 38px rgba(147,51,234,.3),inset 0 0 25px rgba(110,37,180,.1);color:#fff;text-align:center;}
+.home-menu-kicker{font-size:.78rem;letter-spacing:.34em;font-weight:800;color:#d7a8ff;}
+.home-menu-title{margin:0;font-size:clamp(2.3rem,9vw,3.5rem);line-height:.98;font-weight:950;letter-spacing:.02em;color:#fff;text-shadow:0 2px 0 #7c3aed,0 0 20px rgba(168,85,247,.45);}
+.home-menu-title span{display:block;color:#c084fc;}
+.home-menu-subtitle{margin:0 0 5px;font-size:.85rem;letter-spacing:.18em;font-weight:800;color:#f0d9ff;}
+.home-start-button,.home-player-prompt button{width:100%;min-height:52px;border:1px solid #d8b4fe;border-radius:12px;background:linear-gradient(135deg,#8b24d8,#5712a0);color:#fff;font-weight:900;font-size:1rem;letter-spacing:.06em;box-shadow:0 6px 20px rgba(124,58,237,.28);cursor:pointer;}
+.home-start-button:active,.home-player-prompt button:active,.home-password-row button:active{transform:scale(.985);}
+.home-password-area{display:flex;flex-direction:column;gap:9px;text-align:left;padding-top:13px;border-top:1px solid rgba(192,132,252,.25);}
+.home-password-area>label,.home-player-prompt label{font-size:.78rem;font-weight:900;letter-spacing:.13em;color:#d8b4fe;}
+.home-password-row{display:flex;align-items:stretch;gap:8px;width:100%;}
+.home-password-row input,.home-player-prompt input{min-width:0;width:100%;height:46px;box-sizing:border-box;border:1px solid #76509a;border-radius:9px;background:#10091d;color:#fff;padding:0 13px;font:inherit;outline:none;}
+.home-password-row input:focus,.home-player-prompt input:focus{border-color:#c084fc;box-shadow:0 0 0 3px rgba(192,132,252,.15);}
+.home-password-row button{flex:0 0 58px;border:1px solid #d8b4fe;border-radius:9px;background:#7e22ce;color:white;font-size:1rem;font-weight:900;cursor:pointer;}
+.home-password-area small{color:#b8a9c8;font-size:.72rem;line-height:1.4;}
+#menuNotice{display:none;max-width:100%;margin:0;padding:9px 10px;border-radius:8px;background:rgba(127,29,29,.24);color:#fecaca;font-size:.8rem;line-height:1.4;overflow-wrap:anywhere;}
+#menuNotice.visible{display:block;}
+.home-player-prompt{display:flex;flex-direction:column;gap:10px;width:100%;padding-top:12px;border-top:1px solid rgba(192,132,252,.25);}
+.home-player-prompt.hidden{display:none!important;}
+@media(max-width:420px){.title-screen.home-reset{padding:14px 12px max(14px,env(safe-area-inset-bottom))!important}.home-menu-card{gap:12px;padding:22px 18px;border-radius:18px}.home-menu-title{font-size:2.45rem}.home-start-button{min-height:50px}.home-password-row input{font-size:16px}}
+@media(max-height:560px){.title-screen.home-reset{align-items:start!important}.home-menu-card{margin:auto;padding:16px 20px;gap:9px}.home-menu-title{font-size:2rem}.home-menu-subtitle{font-size:.72rem}.home-start-button{min-height:44px}.home-password-row input{height:40px}.home-password-area{padding-top:8px}}
+
+/* Ajuste responsivo: retângulos do menu mais compactos e centralizados. */
+.home-menu-card{width:min(88vw,380px)!important;padding:clamp(16px,3.5vw,26px)!important;gap:11px!important;border-radius:18px!important;}
+.home-start-button{width:82%!important;max-width:290px!important;min-height:46px!important;align-self:center!important;padding:10px 14px!important;font-size:clamp(.82rem,2.7vw,.95rem)!important;border-radius:10px!important;}
+.home-password-area{width:100%!important;box-sizing:border-box!important;gap:7px!important;padding-top:10px!important;}
+.home-password-row{width:100%!important;gap:6px!important;}
+.home-password-row input{height:40px!important;padding:0 10px!important;font-size:16px!important;}
+.home-password-row button{flex-basis:48px!important;min-height:40px!important;padding:6px 8px!important;font-size:.9rem!important;}
+.home-password-area small{font-size:.68rem!important;}
+@media(max-width:480px){
+ .title-screen.home-reset{padding:12px!important;}
+ .home-menu-card{width:min(88vw,340px)!important;padding:16px 14px!important;gap:9px!important;}
+ .home-menu-title{font-size:clamp(2rem,10vw,2.6rem)!important;}
+ .home-menu-subtitle{font-size:clamp(.65rem,3vw,.8rem)!important;letter-spacing:.12em!important;}
+ .home-start-button{width:78%!important;min-height:42px!important;font-size:.8rem!important;}
+ .home-password-area>label{font-size:.7rem!important;}
+ .home-password-row input{height:38px!important;}
+ .home-password-row button{flex-basis:44px!important;min-height:38px!important;}
+}
+@media(max-height:560px){
+ .home-menu-card{width:min(78vw,340px)!important;padding:10px 14px!important;gap:6px!important;}
+ .home-menu-title{font-size:1.8rem!important;}
+ .home-menu-kicker,.home-menu-subtitle{font-size:.65rem!important;}
+ .home-start-button{min-height:36px!important;padding:6px 10px!important;}
+ .home-password-area{padding-top:6px!important;gap:5px!important;}
+ .home-password-row input,.home-password-row button{height:34px!important;min-height:34px!important;}
+ .home-password-area small{display:none!important;}
+}
+
+
+/* Logo oficial enviada pelo usuário no título da tela inicial */
+.home-menu-logo{display:block;width:min(100%,420px);max-height:clamp(105px,25vh,230px);height:auto;object-fit:contain;margin:0 auto 4px;filter:drop-shadow(0 0 16px rgba(168,85,247,.28));}
+.home-menu-card{justify-items:center;}
+@media(max-width:600px){.home-menu-logo{width:min(88vw,340px);max-height:clamp(90px,20vh,175px);margin-bottom:0;}}
+@media(max-height:560px){.home-menu-logo{width:min(48vw,250px);max-height:100px;}}
+
+/* Fundo da tela inicial com o Labirinto Encantado; recorte responsivo. */
+@media(max-width:700px){.title-screen.home-reset .home-reset-placeholder{background:linear-gradient(180deg,rgba(4,2,12,.55),rgba(4,2,12,.78)),url("assets/menu_launch_background.webp") center center / cover no-repeat;}}
+
+
+/* CORRECAO CRITICA: permitir que o menu inicial seja realmente ocultado ao iniciar a partida.
+   As regras .title-screen.home-reset com display:grid!important estavam anulando a classe .hidden. */
+#titleScreen.title-screen.home-reset.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+#titleScreen.title-screen.home-reset:not(.hidden) {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+body:has(#titleScreen.hidden) .game-shell {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+
+/* Password no menu responsivo: painel um pouco menor e levemente elevado. */
+@media (max-width: 700px) {
+  .title-screen.home-reset .home-password-area {
+    width: min(100%, 290px) !important;
+    align-self: center !important;
+    transform: translateY(-6px) !important;
+    padding-top: 4px !important;
+    gap: 5px !important;
+  }
+  .title-screen.home-reset .home-password-area > label { font-size: .66rem !important; }
+  .title-screen.home-reset .home-password-row { width: 100% !important; gap: 5px !important; }
+  .title-screen.home-reset .home-password-row input { height: 35px !important; min-height: 35px !important; padding: 0 8px !important; font-size: 14px !important; }
+  .title-screen.home-reset .home-password-row button { flex-basis: 42px !important; min-height: 35px !important; height: 35px !important; padding: 5px !important; font-size: .82rem !important; }
+  .title-screen.home-reset .home-password-area small { font-size: .62rem !important; line-height: 1.25 !important; }
+}
+@media (max-width: 420px) {
+  .title-screen.home-reset .home-password-area { width: min(100%, 260px) !important; transform: translateY(-8px) !important; }
+  .title-screen.home-reset .home-password-row input { font-size: 13px !important; }
+}
+
+/* Cartão de password de checkpoint mais compacto em todas as fases. */
+.checkpoint-password:not(.hidden){
+  width:min(100% - 24px, 270px) !important;
+  max-width:270px !important;
+  box-sizing:border-box !important;
+  gap:5px !important;
+  margin:9px auto !important;
+  padding:10px 12px !important;
+  border-radius:10px !important;
+}
+.checkpoint-password small{font-size:9px !important;letter-spacing:1.2px !important;line-height:1.25 !important;text-align:center !important;}
+.checkpoint-password strong{font-size:clamp(21px,3.4vw,30px) !important;letter-spacing:2px !important;line-height:1.15 !important;}
+.checkpoint-password span{font-size:10px !important;line-height:1.3 !important;text-align:center !important;}
+@media(max-width:600px){
+  .checkpoint-password:not(.hidden){width:min(100% - 28px, 235px) !important;max-width:235px !important;padding:8px 10px !important;margin:7px auto !important;gap:4px !important;}
+  .checkpoint-password small{font-size:8px !important;letter-spacing:.8px !important;}
+  .checkpoint-password strong{font-size:23px !important;}
+  .checkpoint-password span{font-size:9px !important;}
+}
+
+
+/* Mobile: keep the full checkpoint/password card visible without clipping. */
+@media (max-width: 600px) {
+  .win-overlay {
+    box-sizing: border-box !important;
+    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)) !important;
+    overflow-y: auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .win-card {
+    box-sizing: border-box !important;
+    width: min(100%, 360px) !important;
+    max-width: 360px !important;
+    max-height: calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    overflow-y: auto !important;
+    padding: 14px 12px !important;
+    margin: auto !important;
+  }
+  .checkpoint-password:not(.hidden) {
+    box-sizing: border-box !important;
+    width: min(100%, 270px) !important;
+    max-width: 270px !important;
+    margin: 8px auto !important;
+    padding: 9px 10px !important;
+    gap: 5px !important;
+    overflow-wrap: anywhere !important;
+  }
+  .checkpoint-password small { font-size: 8px !important; line-height: 1.3 !important; letter-spacing: .7px !important; }
+  .checkpoint-password strong { font-size: clamp(20px, 6vw, 24px) !important; letter-spacing: 1.5px !important; }
+  .checkpoint-password span { font-size: 9px !important; line-height: 1.35 !important; }
+  .win-card h2 { font-size: clamp(18px, 5vw, 23px) !important; }
+  .win-card p { line-height: 1.4 !important; }
+}
+@media (max-width: 380px) {
+  .win-card { padding: 10px 8px !important; }
+  .checkpoint-password:not(.hidden) { width: min(100%, 245px) !important; padding: 8px !important; }
+}
+
+
+/* Fundo vertical da tela inicial para celulares — Luan Verso */
+@media (max-width: 700px), (pointer: coarse) {
+  #titleScreen.title-screen.home-reset .home-reset-placeholder {
+    background-image: linear-gradient(180deg, rgba(4,2,12,.22), rgba(4,2,12,.48)), url("assets/menu_mobile_launch.webp") !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+  }
+}
+
+
+/* Ajuste solicitado: painel de controles um pouco mais alto no modo responsivo */
+@media (max-width: 850px) {
+  .mobile-controls {
+    transform: translateY(-28px);
+  }
+}
+@media (max-width: 560px) {
+  .mobile-controls {
+    transform: translateY(-24px);
+  }
+}
+
+
+/* Ajuste adicional solicitado: subir os controles mais 100px no modo responsivo */
+@media (max-width: 850px) {
+  .mobile-controls { transform: translateY(-128px) !important; }
+}
+@media (max-width: 560px) {
+  .mobile-controls { transform: translateY(-124px) !important; }
+}
+
+
+/* Ajuste final: controles 50px abaixo da versão anterior e centralizados */
+@media (max-width: 850px) {
+  .mobile-controls {
+    transform: translateY(-78px) !important;
+    left: 0;
+    right: 0;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .mobile-controls {
+    transform: translateY(-74px) !important;
+    left: 0;
+    right: 0;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+
+/* Centralização definitiva do painel de controles responsivo */
+@media (max-width: 850px), (pointer: coarse) {
+  .mobile-controls {
+    box-sizing: border-box !important;
+    width: max-content !important;
+    max-width: calc(100vw - 16px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    left: auto !important;
+    right: auto !important;
+    align-self: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .mobile-controls .dpad {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+
+/* Correção final baseada na captura: painel de controles realmente centralizado no responsivo */
+@media (max-width: 850px), (pointer: coarse) {
+  .mobile-controls {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: calc(4px + env(safe-area-inset-bottom)) !important;
+    transform: translate(-50%, -78px) !important;
+    width: max-content !important;
+    max-width: calc(100vw - 16px) !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    box-sizing: border-box !important;
+    z-index: 100 !important;
+  }
+  .mobile-controls .dpad { margin: 0 !important; flex: 0 0 auto !important; }
+  .mobile-controls .mobile-laser,
+  .mobile-controls .interact { flex: 0 0 auto !important; }
+}
+@media (max-width: 560px) {
+  .mobile-controls { transform: translate(-50%, -74px) !important; gap: 8px !important; }
+}
+
+
+/* Ajuste solicitado: quadro do labirinto 15px mais alto no modo responsivo. */
+@media (max-width: 850px), (pointer: coarse) {
+  body:has(#titleScreen.hidden) .scene-wrap {
+    transform: translateY(-15px) !important;
+  }
+}
+
+
+/* Ajuste solicitado: descer o painel de controles 5px no modo responsivo, mantendo-o centralizado. */
+@media (max-width: 850px), (pointer: coarse) {
+  .mobile-controls { transform: translate(-50%, -73px) !important; }
+}
+@media (max-width: 560px) {
+  .mobile-controls { transform: translate(-50%, -69px) !important; }
+}
