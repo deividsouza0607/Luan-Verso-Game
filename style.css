@@ -2358,3 +2358,18 @@ body:has(#titleScreen.hidden) .game-shell {
 @media (max-width: 560px) {
   .mobile-controls { transform: translate(-50%, -69px) !important; }
 }
+
+
+/* Cartão final responsivo: manter ranking/conquistas visíveis e permitir rolagem interna. */
+.win-overlay{overflow-y:auto;overscroll-behavior:contain;align-items:center;}
+.win-card{width:min(94vw,460px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;box-sizing:border-box;}
+.final-ranking{width:100%;max-width:100%;max-height:42dvh;overflow-y:auto;box-sizing:border-box;}
+.download-achievements{display:block;width:100%;margin:12px 0 0;padding:11px 12px;border:1px solid #c084fc;border-radius:8px;background:linear-gradient(135deg,#6b21a8,#3b0764);color:#fff;font-weight:800;font-size:12px;letter-spacing:.3px;cursor:pointer;}
+.download-achievements:hover{filter:brightness(1.15);}
+@media(max-width:600px){
+ .win-overlay{padding:8px;align-items:flex-start;}
+ .win-card{width:min(96vw,460px);max-height:calc(100dvh - 16px);padding:14px 12px;}
+ .final-ranking{margin:8px auto;padding:9px;max-height:38dvh;}
+ .final-ranking li{font-size:11px;gap:6px;flex-wrap:wrap;}
+ .download-achievements{font-size:11px;padding:10px 8px;}
+}
