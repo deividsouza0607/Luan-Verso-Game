@@ -32,3 +32,13 @@ Jogo web responsivo feito com HTML, CSS e JavaScript. Esta edição foi preparad
 
 ## Fase 1 — O Despertar do Espelho
 A Fase 1 agora usa um desenho de labirinto determinístico: a primeira aventura mantém os mesmos corredores a cada nova partida. O objetivo é ativar as quatro alavancas nos quadrantes, evitar as aranhas e aproximar-se do Portal no centro para avançar. As fases seguintes continuam com variações de labirinto.
+
+
+## Famílias de monstros por fase
+- Fases 1–3: aranhas.
+- Fases 4–6: esqueletos.
+- Fases 7–9: múmias.
+- Fases 10–12: fantasmas ou amebas.
+- Fases 13–15: golens.
+- Fases 16–18: monstros aleatórios de diferentes famílias.
+- Fases 19–20: vampiros e lobisomens.

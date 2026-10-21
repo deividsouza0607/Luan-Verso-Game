@@ -65,8 +65,10 @@
   </main>
   <footer>WALKS DRONE VIEW <span>•</span> Explore com cuidado. O Portal observa.</footer>
 </div>
+<button class="pause-toggle" id="pauseToggle" type="button" aria-label="Pausar jogo" title="Pausar jogo">⏸ PAUSAR</button>
 <button class="sound-toggle" id="soundToggle" aria-label="Ativar ou desativar sons" title="Ativar/desativar sons">🔊 Som: ligado</button>
-<div class="mobile-controls" aria-label="Controles para celular"><div class="dpad"><button data-move="up">▲</button><div><button data-move="left">◀</button><button data-move="down">▼</button><button data-move="right">▶</button></div></div><button class="interact" id="mobileInteract">INTERAGIR <b>E</b></button></div>
+<div class="pause-overlay hidden" id="pauseOverlay" role="dialog" aria-modal="true" aria-label="Jogo pausado"><div class="pause-card"><div class="pause-icon">Ⅱ</div><h2>JOGO PAUSADO</h2><p>Respire um pouco. Sua aventura está congelada.</p><button id="resumeGame" type="button">▶ CONTINUAR JOGO</button><small>Atalho: P ou Esc</small></div></div>
+<div class="mobile-controls" aria-label="Controles para celular"><div class="dpad"><button data-move="up">▲</button><div><button data-move="left">◀</button><button data-move="down">▼</button><button data-move="right">▶</button></div></div><button class="interact mobile-laser" id="mobileLaser" type="button">⚡ LASER</button></div>
 <!-- Elementos internos necessários para a lógica do jogo; permanecem ocultos na interface. -->
 <div id="gameCompatibility" aria-hidden="true" style="display:none!important">
   <div id="toast"></div>
